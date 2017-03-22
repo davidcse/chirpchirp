@@ -1,22 +1,90 @@
+{% load staticfiles %}
 <head>
   <title>Tweet</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="{% static "js/homepage.js" %}" type="text/javascript"></script>
+  <script src="{% static "js/tweetBox.js" %}" type="text/javascript"></script>
+  <link rel="stylesheet" href="{% static "css/homepage.css"%}">
 </head>
-<body>
-  <p>{{greeting}}</p>
-  <button type="button" class="btn btn-info fullbutton" id="logout">Log out</button>
-  <table class="table">
-    <tr>
-      <td class="tableHeader">Tweets</td>
-      <td class="tableHeader">Following</td>
-      <td class="tableHeader">Followers</td>
-    </tr>
-    <tr>
-      <td class="tableContent">TweetsCount</td>
-      <td class="tableContent">Following</td>
-      <td class="tableContent">Followers</td>
-    </tr>
-  </table>
 
+<body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand"> Chirp Chirp</a>
+        <ul class="nav navbar-nav">
+          <li><button type="button", class="btn btn-info btn-lg pull-right", id="logoutButton">Logout</button></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <p class="text-center">{{greeting}}</p>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 well">
+        <p class="text-center ">
+          {{username}}
+        </p>
+        <table class="table">
+          <tr>
+            <td>Followers</td>
+            <td>Following</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="tweetbox-container container">
+    <div class="row">
+      <div class="panel panel-default tweetbox col-md-4">
+        <div class="panel-body">
+          <!-- Input tweet -->
+          <textarea class="form-control" id="tweetText" placeholder="Message" rows="2"></textarea>
+          <!-- Character count, Send Button --><br>
+          <div class="pull-right btnGroup">
+            <strong id="charLeft">140 &nbsp &nbsp</strong>
+            <button id="postTweetButton" class="btn btn-info btn-sm pull-right" type="button">Tweet</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tweetFeed">
+    <ul id="tweetFeedList"></ul>
+  </div>
 
 </body>
+
+<!--
+html
+  head
+
+    script(type="text/javascript", src="js/therapySession.js")
+  body
+
+    div(class="modal fade", id="conversationHistory", role="dialog")
+      div(class="modal-dialog modal-lg")
+        div(class="modal-content")
+          div(class="modal-header")
+            button(type="button", class="close", data-dismiss="modal") &times;
+            h4(class="modal-title") Past List of Conversations
+          div(class="modal-body")
+            ul(id="pastConversationsList")
+          div(class="modal-footer")
+            button(type="button", class="btn btn-default", data-dismiss="modal") close
+
+    div.well.text-center
+      p Hi #{name}! How are you?
+      p Your current log-in time is #{date}
+    div#chatbox
+      ul#chatlist
+    form#human_resp
+      input.form-control.text-center(name="human", type="text", id="humanmsg", size="75")
+      input.form-control(type="submit", id="submitmsg", value="Send")
+    script.
+      #{injectedScriptText} -->

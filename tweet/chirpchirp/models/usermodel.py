@@ -3,7 +3,7 @@ import json
 # used for loading a User object on a request
 class usermodel:
     def __init__(self, request):
-        body = request.body
+        body = request.body # expect stringified json
         params = json.loads(body)
         self.username = params.get("username", "")
         self.email = params.get("email", "")

@@ -1,0 +1,15 @@
+body {
+	font-family: "Lato", sans-serif;
+}
+div{
+	font-weight: bold;
+}
+
+input[type=submit]{
+	background-color: #008CBA;
+}
+
+li{
+	list-style-type: none;
+	float: left
+}

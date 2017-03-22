@@ -1,9 +1,9 @@
 from .. utils import responses
+from .. utils import auth
 from .. db.tweetdb import tweetdb
 from .. models.usermodel import usermodel
 from django.views.decorators.csrf import csrf_exempt
-
-# Create your views here.
+from django.shortcuts import get_object_or_404, render
 
 # /adduser {username, email, password}
 # no bad result maybe if username already exists
@@ -12,9 +12,12 @@ def adduser(request):
     u = usermodel(request)
     db = tweetdb(user=u)
     # actually add user here
-    db.insertdisable()
+    success = db.insertdisable()
     db.close()
-    return responses.ok_response()
+    if(success):
+        return responses.ok_response()
+    else:
+        return responses.err_response("username or email already exists")
 
 
 # /verify {email, key}
@@ -26,7 +29,6 @@ def verify(request):
     db.verifyuser()
     db.close()
     return responses.ok_response()
-
 
 # login resource (username, password)
 @csrf_exempt
@@ -42,14 +44,14 @@ def login(request):
     request.session["uid"] = db.getuid()
     request.session["uname"] = u.username
     db.close()
-    return responses.ok_response()
+    return responses.redirect_ok_response("/homepage")
 
 # logout {}
 @csrf_exempt
 def logout(request):
     try:
-        del request.session['username']
-        del request.session['convo_id']
-        return responses.ok_response()
+        del request.session['uname']
+        del request.session['uid']
+        return responses.redirect_ok_response('/')
     except KeyError:
         return responses.err_response("Please login, before logging out")

@@ -1,5 +1,7 @@
 import time
+from pymongo.errors import DuplicateKeyError
 from pymongo import MongoClient
+import pymongo
 from bson.objectid import ObjectId
 # main file for database transactions
 
@@ -15,17 +17,25 @@ class tweetdb:
         self.db = self.client.tweet
         self.userDB = self.db.user
         self.tweetsDB = self.db.tweets
+        # ensure that both email and username form a joint unique key
+        self.userDB.create_index( "username", unique=True )
+        self.userDB.create_index( "email", unique=True )
         # @TODO implement logging console.log("mongodb started on localhost:27017")
+
 
     # insert disabled user
     def insertdisable(self):
         u = self.user
-        self.userDB.insert({
-            "username": u.username,
-            "email": u.email,
-            "password": u.password,
-            "verified": False
-        })
+        try:
+            self.userDB.insert({
+                "username": u.username,
+                "email": u.email,
+                "password": u.password,
+                "verified": False
+            })
+            return True
+        except DuplicateKeyError:
+            return False
 
     # verify user
     def verifyuser(self):

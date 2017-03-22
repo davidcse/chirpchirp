@@ -2,6 +2,7 @@ from django.conf.urls import url
 from controllers import user
 from controllers import tweet
 from controllers import endpoint
+from controllers import testEndpoint
 
 
 urlpatterns = [
@@ -19,10 +20,13 @@ urlpatterns = [
     url(r'^item/(?P<id>[\w]+)$', tweet.item, name="item"),
     # /search
     url(r'^search$', tweet.search, name="search"),
+    # /test/homepage
+    url(r'^homepage$', endpoint.homepage, name="homepage"),
+    # /index
+    url(r'^$', endpoint.index, name="index"),
 
-
-    # /testhomepage
-    url(r'^testhomepage$', endpoint.testhomepage, name="testhomepage"),
-    # /testhomepage
-    url(r'^testindex$', endpoint.testindex, name="testindex"),
+    # /test/homepage
+    url(r'^test/homepage$', testEndpoint.homepage, name="testhomepage"),
+    # /test/index
+    url(r'^test/index$', testEndpoint.index, name="testindex")
 ]

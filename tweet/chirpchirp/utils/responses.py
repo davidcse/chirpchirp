@@ -11,7 +11,7 @@ def ok_response():
 
 def err_response(errmsg):
     return JsonResponse({
-            "status": "error",
+            "status": "ERROR",
             "error": errmsg
     })
 

@@ -1,14 +1,13 @@
 from .. db import tweetdb
 from .. utils import responses
 from .. models import usermodel
-from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
 @csrf_exempt
 def adduser(request):
-    u = usermodel(request)
+    u = usermodel.usermodel(request)
     db = tweetdb(user=u)
     # actually add user here
     db.insertdisable()
@@ -18,11 +17,12 @@ def adduser(request):
 
 @csrf_exempt
 def verify(request):
-    u = usermodel(request)
+    u = usermodel.usermodel(request)
     db = tweetdb(user=u)
     db.verifyuser()
     db.close()
     return responses.ok_response()
+
 
 @csrf_exempt
 def login(request):

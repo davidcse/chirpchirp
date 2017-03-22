@@ -4,6 +4,7 @@ from .. models import tweetmodel
 from .. models import searchmodel
 from django.views.decorators.csrf import csrf_exempt
 
+
 # creates a new tweet {content}
 @csrf_exempt
 def additem(request, id):
@@ -11,7 +12,7 @@ def additem(request, id):
     uname = request.session.get("uname", None)
     if uid is None:
         return responses.error("Please login before adding item")
-    t = tweetmodel(uname, uid, request)
+    t = tweetmodel.tweetmodel(uname, uid, request)
     if len(t.content) > 140:
         return responses.error("Please make sure contents is at most 140 characters long")
     db = tweetdb(tweet=t)
@@ -31,7 +32,7 @@ def item(request, id):
 
 # {timestamp, limit}
 def search(request):
-    tsearch = searchmodel(request)
+    tsearch = searchmodel.searchmodel(request)
     db = tweetdb(search=tsearch)
     r = db.tweetsearch()
     db.close()

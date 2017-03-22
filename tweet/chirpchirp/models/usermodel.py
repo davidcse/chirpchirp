@@ -9,3 +9,4 @@ class usermodel:
         self.email = params.get("email", "")
         self.password = params.get("password", "")
         self.key = params.get("key", "")
+        print self.email, self.password

@@ -16,7 +16,7 @@ urlpatterns = [
     # /additem
     url(r'^additem$', tweet.additem, name='additem'),
     # /item/123
-    url(r'^item/(?P<id>[0-9]+)$', tweet.item, name="item"),
+    url(r'^item/(?P<id>[\w]+)$', tweet.item, name="item"),
     # /search
     url(r'^search$', tweet.search, name="search"),
 

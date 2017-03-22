@@ -14,3 +14,5 @@ class searchmodel:
         elif limit > 100:
             limit = 100
         self.limit = limit
+    def fo(self):
+        print r''

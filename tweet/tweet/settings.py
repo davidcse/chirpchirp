@@ -50,6 +50,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# @TODO figure out how we are going to store sessions
+SESSION_ENGINE="django.contrib.sessions.backends.file"
+
 ROOT_URLCONF = 'tweet.urls'
 
 TEMPLATES = [

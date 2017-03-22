@@ -1,8 +1,6 @@
 import time
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-import json
-from bson import json_util
 # main file for database transactions
 
 # used to represent mongo client
@@ -17,7 +15,7 @@ class tweetdb:
         self.db = self.client.tweet
         self.userDB = self.db.user
         self.tweetsDB = self.db.tweets
-        console.log("mongodb started on localhost:27017")
+        # @TODO implement logging console.log("mongodb started on localhost:27017")
 
     # insert disabled user
     def insertdisable(self):

@@ -1,13 +1,15 @@
-from .. db import tweetdb
 from .. utils import responses
-from .. models import usermodel
+from .. db.tweetdb import tweetdb
+from .. models.usermodel import usermodel
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
+# /adduser {username, email, password}
+# no bad result maybe if username already exists
 @csrf_exempt
 def adduser(request):
-    u = usermodel.usermodel(request)
+    u = usermodel(request)
     db = tweetdb(user=u)
     # actually add user here
     db.insertdisable()
@@ -15,19 +17,22 @@ def adduser(request):
     return responses.ok_response()
 
 
+# /verify {email, key}
+# no check to see if a user with this email
 @csrf_exempt
 def verify(request):
-    u = usermodel.usermodel(request)
+    u = usermodel(request)
     db = tweetdb(user=u)
     db.verifyuser()
     db.close()
     return responses.ok_response()
 
 
+# login resource (username, password)
 @csrf_exempt
 def login(request):
     # used to login
-    u = usermodel.usermodel(request)
+    u = usermodel(request)
     db = tweetdb(user=u)
     # verify user and account details
     if db.isverified() == False:
@@ -39,7 +44,7 @@ def login(request):
     db.close()
     return responses.ok_response()
 
-
+# logout {}
 @csrf_exempt
 def logout(request):
     try:

@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 
 
-def returnresp(app, obj):
+def returnresp(obj):
     return JsonResponse(obj)
 
 
@@ -16,7 +16,7 @@ def err_response(errmsg):
     })
 
 
-def tweet(app, tid):
+def tweet(tid):
     return JsonResponse({
         "status": "OK",
         "id": tid

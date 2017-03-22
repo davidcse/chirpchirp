@@ -7,6 +7,7 @@ urlpatterns = [
     url('^verify', user.verify, name="verify"),
     url('^login', user.login, name="login"),
     url('^logout', user.logout, name="logout"),
+    url('^additem', tweet.additem, name='additem'),
     url('^item/(?P<id>[0-9]+)/$', tweet.item, name="item"),
-
+    url('^search', tweet.search, name="search"),
 ]

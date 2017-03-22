@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def adduser(request):
-    u = usermodel(request.body)
+    u = usermodel(request)
     db = tweetdb(user=u)
     # actually add user here
     db.insertdisable()
@@ -18,7 +18,7 @@ def adduser(request):
 
 @csrf_exempt
 def verify(request):
-    u = usermodel(request.data)
+    u = usermodel(request)
     db = tweetdb(user=u)
     db.verifyuser()
     db.close()
@@ -27,7 +27,7 @@ def verify(request):
 @csrf_exempt
 def login(request):
     # used to login
-    u = usermodel(request.data)
+    u = usermodel(request)
     db = tweetdb(user=u)
     # verify user and account details
     if db.isverified() == False:
@@ -42,8 +42,13 @@ def login(request):
 
 @csrf_exempt
 def logout(request):
-    # del request.session['username']
-    # del request.session['convo_id']
-    return responses.ok_response()
+    try:
+        del request.session['username']
+        del request.session['convo_id']
+        return responses.ok_response()
+    except KeyError:
+        return responses.err_response("Please login, before logging out")
+
+
 
 

@@ -27,7 +27,7 @@ def verify(request):
 @csrf_exempt
 def login(request):
     # used to login
-    u = usermodel(request)
+    u = usermodel.usermodel(request)
     db = tweetdb(user=u)
     # verify user and account details
     if db.isverified() == False:
@@ -48,7 +48,3 @@ def logout(request):
         return responses.ok_response()
     except KeyError:
         return responses.err_response("Please login, before logging out")
-
-
-
-

@@ -13,10 +13,11 @@ class tweetdb:
         self.tweet = tweet
         self.search = search
         # connect to mongo
-        self.client = MongoClient()
+        self.client = MongoClient('localhost',27017)
         self.db = self.client.tweet
         self.userDB = self.db.user
         self.tweetsDB = self.db.tweets
+        console.log("mongodb started on localhost:27017")
 
     # insert disabled user
     def insertdisable(self):

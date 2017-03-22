@@ -4,7 +4,6 @@ from .. models import tweetmodel
 from .. models import searchmodel
 from django.views.decorators.csrf import csrf_exempt
 
-
 # creates a new tweet {content}
 @csrf_exempt
 def additem(request, id):

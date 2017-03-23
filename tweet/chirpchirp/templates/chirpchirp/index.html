@@ -15,15 +15,31 @@
     <div class="container">
       <div class="login panel panel-default">
         <div class="panel-body">
-          <h1 class="text-center">Login</h1>
-          <form id="main-form" method="post" action="/login">
-          	<input class="form-control" type="text" name="username" id="usernameField" placeholder="Username" />
-            <input class="form-control input-sm" type="password" name="password" id="passwordField" placeholder="Password"/>
-            <input class="form-control input-sm collapse" type="text" name="email" id="emailField" placeholder="email" />
-          </form>
-          <button type="submit" class="btn btn-primary btn-block btn-large" id="submit-login">Log In</button>
-          <button type="button" class="btn btn-block btn-link addUser">Create An Account</button>
-          <div id="messageDiv" class="message"></div>
+
+          <div class="collapse submission-container">
+            <h1 class="text-center">Login</h1>
+            <form id="main-form" method="post" action="/login">
+            	<input class="form-control" type="text" name="username" id="usernameField" placeholder="Username" />
+              <input class="form-control input-sm" type="password" name="password" id="passwordField" placeholder="Password"/>
+              <input class="form-control input-sm collapse collapse-email" type="text" name="email" id="emailField" placeholder="email" />
+            </form>
+            <button type="submit" class="btn btn-primary btn-block btn-large" id="submit-login">Log In</button>
+            <button type="button" class="btn btn-block btn-link addUser">Create An Account</button>
+            <button type="button" class="btn btn-block btn-link verifyUser">Verify An Account</button>
+            <div id="messageDiv" class="message"></div>
+          </div>
+
+
+          <div class="container collapse col-md-12 verify-account-container">
+              <h1 class="text-center">Verify Account</h1>
+              <form id="verify-form" method="post" action="/verify">
+                <input class="form-control input-sm" type="text" name="email" id="verifyEmailField" placeholder="Email" />
+                <input class="form-control input-sm" type="text" name="key" id="verifyKeyField" placeholder="Activation Key"/>
+              </form>
+              <button type="submit" class="btn btn-primary btn-block btn-large" id="submit-verify"> Verify Account </button>
+          </div>
+
+
         </div>
       </div>
     </div>

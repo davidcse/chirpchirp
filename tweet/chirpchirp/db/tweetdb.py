@@ -43,6 +43,9 @@ class tweetdb:
         # assume key matched abracadabra
         u = self.user
         self.userDB.update_one({"email": u.email}, {"$set": {"verified": True}}, upsert=False)
+        # verify that operation success, else means record does not exist in db.
+        v = self.userDB.find_one({"email":u.email,"verified":True})
+        return v != None
 
     #
     def isverified(self):

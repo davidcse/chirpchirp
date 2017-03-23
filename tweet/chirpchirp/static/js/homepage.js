@@ -13,6 +13,7 @@ function logoutHandler(){
 	});
 }
 
+
 $(document).ready(function(){
 	logoutHandler();
 });

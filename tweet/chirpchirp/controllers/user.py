@@ -26,9 +26,12 @@ def adduser(request):
 def verify(request):
     u = usermodel(request)
     db = tweetdb(user=u)
-    db.verifyuser()
+    success = db.verifyuser()
     db.close()
-    return responses.ok_response()
+    if(success):
+        return responses.ok_response()
+    else:
+        return responses.err_response("User does not exist")
 
 # login resource (username, password)
 @csrf_exempt

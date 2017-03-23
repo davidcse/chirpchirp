@@ -11,11 +11,15 @@ input[type=submit]{
 
 
 #leftContainer{
-	float:left
+	float:left;
+	height: 100%;
+	width:50%;
 }
 
 #rightContainer{
-	float:left
+	float:left;
+	height: 100%;
+	width:50%;
 }
 li{
 	list-style-type: none;

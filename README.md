@@ -52,3 +52,11 @@ Config for mongodb
 0.0.0.0 (any host)
 or
 specify host
+
+sudo pip install django
+sudo pip install pymongo
+sudo pip install python-memcached
+<br>
+
+Using uwsgi,
+sudo uwsgi --http :80 --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 4 --threads 2

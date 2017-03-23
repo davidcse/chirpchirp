@@ -51,7 +51,7 @@ MIDDLEWARE = [
 ]
 
 # @TODO figure out how we are going to store sessions
-SESSION_ENGINE="django.contrib.sessions.backends.file"
+SESSION_ENGINE="django.contrib.sessions.backends.cache"
 
 ROOT_URLCONF = 'tweet.urls'
 
@@ -81,6 +81,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        # 'LOCATION': '127.0.0.1:11211',
+        'LOCATION': '130.245.168.186:11211',
+
     }
 }
 

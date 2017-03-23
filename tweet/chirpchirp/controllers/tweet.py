@@ -13,8 +13,6 @@ def additem(request):
     if uid is None:
         return responses.err_response("Please login before adding item")
     t = tweetmodel(uname, uid, request)
-    if len(t.content) > 140:
-        return responses.err_response("Please make sure contents is at most 140 characters long")
     db = tweetdb(tweet=t)
     tid = db.posttweet()
     db.close()

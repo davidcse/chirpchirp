@@ -12,16 +12,17 @@ class tweetdb:
         self.user = user
         self.tweet = tweet
         self.search = search
-        # connect to mongo
-        self.client = MongoClient('localhost',27017)
+        # connect to mongo, eventually migrate to sharding...
+        if not user is None:
+            self.client = MongoClient('130.245.168.162',27017)
+        else:
+            self.client = MongoClient('130.245.168.191', 27017)
         self.db = self.client.tweet
         self.userDB = self.db.user
         self.tweetsDB = self.db.tweets
         # ensure that both email and username form a joint unique key
         self.userDB.create_index( "username", unique=True )
         self.userDB.create_index( "email", unique=True )
-        # @TODO implement logging console.log("mongodb started on localhost:27017")
-
 
     # insert disabled user
     def insertdisable(self):

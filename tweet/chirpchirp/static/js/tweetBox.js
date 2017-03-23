@@ -14,7 +14,7 @@ function tweetAjaxPost(tweet){
 
 //show the tweet in list
 function renderTweetFeedList(tweet){
-  var listElement = '<li>'+ tweet +'</li><br>'
+  var listElement = '<li> ' + tweet + '</li>';
   $("#tweetFeedList").append(listElement);
 }
 

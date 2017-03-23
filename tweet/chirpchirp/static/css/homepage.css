@@ -9,7 +9,14 @@ input[type=submit]{
 	background-color: #008CBA;
 }
 
+
+#leftContainer{
+	float:left
+}
+
+#rightContainer{
+	float:left
+}
 li{
 	list-style-type: none;
-	float: left
 }

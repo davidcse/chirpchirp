@@ -18,6 +18,14 @@ function renderTweetFeedList(username, tweet){
   $("#tweetFeedList").append(listElement);
 }
 
+// get a single tweet by id and render it to itemResult div.
+function renderTweetItem(username,tweet){
+  $("#itemResult").html(''); // clear previous list element
+  $("#itemResult").append(listElement);
+  var listElement = '<li> <strong>' + username + ': </strong>' + tweet + '</li><br>';
+  $("#itemResult").append(listElement);
+}
+
 //Handler to post a tweet
 function postTweetHandler(){
 	$('#postTweetButton').on('click', function(e){
@@ -56,7 +64,28 @@ function searchFieldHandler(){
 }
 
 
+function searchItemHandler(){
+  $("#searchItem").click(function(e){
+    e.preventDefault();
+    var tweetId = $("#searchItemField").val();
+    console.log("getting /item: "+ tweetId);
+    $.ajax({
+      type: "get",
+      url: "/item/"+tweetId,
+      timeout: 2000
+    }).done(function(data){
+      console.log("received from server:"+JSON.stringify(data));
+      if(data.status !="OK"){
+        console.log("encountered server error");
+        return
+      }
+      renderTweetItem(data.item.username, data.item.content);
+    });
+  });
+}
+
 $(document).ready(function(){
   postTweetHandler();
   searchFieldHandler();
+  searchItemHandler();
 });

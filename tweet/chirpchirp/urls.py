@@ -3,6 +3,7 @@ from controllers import user
 from controllers import tweet
 from controllers import endpoint
 from controllers import testEndpoint
+from controllers import follow
 
 
 urlpatterns = [
@@ -16,10 +17,20 @@ urlpatterns = [
     url(r'^logout$', user.logout, name="logout"),
     # /additem
     url(r'^additem$', tweet.additem, name='additem'),
-    # /item/123
+    # /item/<id>
     url(r'^item/(?P<id>[\w]+)$', tweet.item, name="item"),
     # /search
     url(r'^search$', tweet.search, name="search"),
+    # /follow
+    url(r'^follow$', follow.follow, name="follow"),
+    # /user/<username>
+    url(r'^user/(?P<username>[\w]+)', follow.user, name='user'),
+    # /user/<username>/followers
+    url(r'^user/(?P<username>[\w]+)/followers', follow.followers, name='followers'),
+    # /user/<username>/following
+    url(r'^user/(?P<username>[\w]+)/following$', follow.following, name='following'),
+
+
     # /test/homepage
     url(r'^homepage$', endpoint.homepage, name="homepage"),
     # /index

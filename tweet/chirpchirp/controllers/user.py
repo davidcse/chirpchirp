@@ -3,7 +3,7 @@ from .. utils import auth
 from .. db.tweetdb import tweetdb
 from .. models.usermodel import usermodel
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import get_object_or_404, render
+
 
 # /adduser {username, email, password}
 # no bad result maybe if username already exists
@@ -28,10 +28,11 @@ def verify(request):
     db = tweetdb(user=u)
     success = db.verifyuser()
     db.close()
-    if(success):
+    if success:
         return responses.ok_response()
     else:
         return responses.err_response("User does not exist")
+
 
 # login resource (username, password)
 @csrf_exempt
@@ -48,6 +49,7 @@ def login(request):
     request.session["uname"] = u.username
     db.close()
     return responses.redirect_ok_response("/homepage")
+
 
 # logout {}
 @csrf_exempt

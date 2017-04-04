@@ -3,6 +3,7 @@ from .. db.tweetdb import tweetdb
 from .. models.tweetmodel import tweetmodel
 from .. models.searchmodel import searchmodel
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 
 
 # creates a new tweet {content}
@@ -19,10 +20,15 @@ def additem(request):
     return responses.tweet(tid)
 
 
-# returns tweet from id (<int:id>) for int
+# /item/<id> retrieve/delete
 @csrf_exempt
 def item(request, id):
     db = tweetdb()
+    if request.method == "DELETE":
+        delete_response = db.delete_tweet(id)
+        db.close()
+        return HttpResponse(delete_response)
+    # insert tweet on POST request
     r = db.itemsearch(id)
     db.close()
     return responses.returnresp(r)

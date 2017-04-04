@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# @TODO figure out how we are going to store sessions
+# set up cache engine
 SESSION_ENGINE="django.contrib.sessions.backends.cache"
 
 ROOT_URLCONF = 'tweet.urls'
@@ -87,7 +87,8 @@ DATABASES = {
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '130.245.168.186:11211',
+        # 'LOCATION': '130.245.168.186:11211',
+        'LOCATION': '127.0.0.1:11211',
     }
 }
 

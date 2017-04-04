@@ -48,6 +48,17 @@ uname -n | sudo tee /usr/share/nginx/html/index.html
 
 
 <br>
+
+sudo mongod status
+sudo mongod start
+sudo mongod status
+use tweet
+
+tweet.user.find({})
+tweet.tweets.find({})
+
+
+
 Config for mongodb
 0.0.0.0 (any host)
 or

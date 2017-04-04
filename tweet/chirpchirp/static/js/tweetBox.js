@@ -1,4 +1,4 @@
-//send tweet to the server
+//send tweet to the server, on response update the tweet feed view.
 function tweetAjaxPost(tweet){
   console.log("posting tweet: " + tweet + " by :" + username);
   $.ajax({
@@ -12,17 +12,32 @@ function tweetAjaxPost(tweet){
   });
 }
 
-//show the tweet in list
+function createTweetDomContainer(user,tweet){
+    return '\
+    <div class="row">\
+      <div class="col-sm-3">\
+        <div class="well">\
+         <p><strong>@'+username+'<strong></p>\
+        </div>\
+      </div>\
+      <div class="col-sm-9">\
+        <div class="well">\
+          <p>'+ tweet + '</p>\
+        </div>\
+      </div>\
+    </div>'
+}
+
+//render the view of tweets in tweet feed list
 function renderTweetFeedList(username, tweet){
-  var listElement = '<li> <strong>' + username + ': </strong>' + tweet + '</li><br>';
+  var listElement = createTweetDomContainer(username,tweet);
   $("#tweetFeedList").append(listElement);
 }
 
 // get a single tweet by id and render it to itemResult div.
 function renderTweetItem(username,tweet){
-  $("#itemResult").html(''); // clear previous list element
-  $("#itemResult").append(listElement);
-  var listElement = '<li> <strong>' + username + ': </strong>' + tweet + '</li><br>';
+  $("#itemResult").html(''); // clear previous list elements
+  var listElement = createTweetDomContainer(username,tweet);
   $("#itemResult").append(listElement);
 }
 
@@ -85,6 +100,7 @@ function searchItemHandler(){
 }
 
 $(document).ready(function(){
+  // bind handlers
   postTweetHandler();
   searchFieldHandler();
   searchItemHandler();

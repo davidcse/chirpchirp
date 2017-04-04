@@ -46,10 +46,10 @@ class tweetdb:
     def verifyuser(self):
         # assume key matched abracadabra
         u = self.user
-        self.userDB.update_one({"email": u.email}, {"$set": {"verified": True}}, upsert=False)
+        result = self.userDB.update_one({"email": u.email}, {"$set": {"verified": True}}, upsert=False)
         # verify that operation success, else means record does not exist in db.
-        v = self.userDB.find_one({"email":u.email,"verified":True})
-        return v != None
+        # v = self.userDB.find_one({"email":u.email,"verified":True})
+        return result.modified_count == 1 #v != None
 
     #
     def isverified(self):
@@ -119,14 +119,24 @@ class tweetdb:
     def follow_or_unfollow(self, curr_uname):
         # get request model
         follow_model = self.follow
+        status = True
         if follow_model.follow == True:
             print curr_uname, 'following', follow_model.username
-            # insert into database
-            self.followsDB.insert({
+            # insert into database, without duplicates.
+            self.followsDB.update_one({
+                "username": follow_model.username,
+                "follower_username": curr_uname
+            },upsert=True)
+        elif follow_model.follow == False:
+            print curr_uname, 'unfollowing', follow_model.username
+            # delete record representing a follow relationship
+            self.followsDB.delete_one({
                 "username": follow_model.username,
                 "follower_username": curr_uname
             })
-        return True
+        else:
+            status = False
+        return status
 
     # returns followers of user (username)
     def get_followers(self, username, limit):

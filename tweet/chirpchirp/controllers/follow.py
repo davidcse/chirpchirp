@@ -18,10 +18,12 @@ def follow(request):
     # connect to mongo
     db = tweetdb(follow=f_model)
     # perform database transaction
-    db.follow_or_unfollow(uname)
+    transaction_status = db.follow_or_unfollow(uname)
     # close connection
     db.close()
-    return responses.ok_response()
+    if(transaction_status):
+        return responses.ok_response()
+    return response.err_response("follow or unfollow failed")
 
 
 # /user/<username>

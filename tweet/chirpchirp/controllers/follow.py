@@ -23,7 +23,7 @@ def follow(request):
     db.close()
     if(transaction_status):
         return responses.ok_response()
-    return response.err_response("follow or unfollow failed")
+    return responses.err_response("follow or unfollow failed")
 
 
 # /user/<username>
@@ -32,6 +32,7 @@ def user(request, username):
     r = db.retrieve_user(username)
     db.close()
     return responses.returnresp(r)
+#
 
 
 # /user/<username>/followers @Change

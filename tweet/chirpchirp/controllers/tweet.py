@@ -37,6 +37,9 @@ def item(request, id):
 # {timestamp, limit}
 @csrf_exempt
 def search(request):
+    uname = request.session.get("uname", None)
+    if uname is None:
+        return responses.err_response("Please using search")
     tsearch = searchmodel(request)
     db = tweetdb(search=tsearch)
     r = db.tweetsearch()

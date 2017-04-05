@@ -71,3 +71,10 @@ sudo pip install python-memcached
 
 Using uwsgi,
 sudo uwsgi --http :80 --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 4 --threads 2
+
+
+# MongoDB sharding
+user: {_id, username, password, verified, email}<br>
+tweets: {_id, username, content, uid, tweetstamp}<br>
+follows: {_id, username, follower_username}
+

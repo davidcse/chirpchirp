@@ -6,7 +6,7 @@ class searchmodel:
     def __init__(self, request):
         body = request.body
         params = json.loads(body) # expects stringified json
-        self.tweetstamp = params.get("timestamp", int(time.time()))
+        self.tweetstamp = int(params.get("timestamp", time.time()))
         limit = params.get("limit", 25)
         # set default
         if limit > 100:
@@ -18,6 +18,7 @@ class searchmodel:
         self.username = params.get("username", None)
         # following param
         self.following = params.get("following", True)
+        print '=>model:', self.tweetstamp, self.limit, self.q, self.username, self.following
 
 
     def fo(self):

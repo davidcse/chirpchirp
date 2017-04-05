@@ -42,6 +42,6 @@ def search(request):
         return responses.err_response("Please using search")
     tsearch = searchmodel(request)
     db = tweetdb(search=tsearch)
-    r = db.tweetsearch()
+    r = db.tweetsearch(loggedin_username=uname)
     db.close()
     return responses.returnresp(r)

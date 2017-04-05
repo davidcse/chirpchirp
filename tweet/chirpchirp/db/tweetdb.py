@@ -107,42 +107,27 @@ class tweetdb:
             # get users logged in user is following
             following_users = self.followsDB.find({"follower_username": loggedin_username})
             for user in following_users:
-                # break out of loop if reached capacity of limit
-                if results["items"].size >= searchmodel.limit:
-                    break
                 # if query string is specified
                 if searchmodel.q != ".*":
                     searchmodel.q = ".*" + str(searchmodel.q) + ".*"
-                tweets = self.tweetsDB.find({"content": searchmodel.q, "username": user["username"], "timestamp": {"$lt": searchmodel.tweetstamp}})
+                tweets = self.tweetsDB.find({"content": {"$regex": searchmodel.q}, "username": user["username"], "tweetstamp": {"$lte": searchmodel.tweetstamp}})
                 # add tweets to result set
                 for tweet in tweets:
-                    results.append(tweet["content"])
+                    if len(results["items"]) >= searchmodel.limit:
+                        break
+                    results["items"].append(tweet["content"])
         else:
             # don't filter by users that user is following
-            # this code can be refactored as it is the same as above
+            # if query string is specified
             if searchmodel.q != ".*":
                 searchmodel.q = ".*" + str(searchmodel.q) + ".*"
-            tweets = self.tweetsDB.find({"content": searchmodel.q, "timestamp": {"$lt": searchmodel.tweetstamp}})
+            tweets = self.tweetsDB.find({"content": {"$regex": searchmodel.q}, "tweetstamp": {"$lte": searchmodel.tweetstamp}})
+            # add tweets to result set
             for tweet in tweets:
-                if results["items"].size >= searchmodel.limit:
+                if len(results["items"]) >= searchmodel.limit:
                     break
-                results.append({"id": str(tweet["_id"]), "username": tweet["username"], "content": tweet["content"], "timestamp": tweet["tweetstamp"]})
-        # s = self.search
-        # stamp = s.tweetstamp
-        # lim = s.limit
-        # results = {
-        #     "status": "OK",
-        #     "items": []
-        # }
-        # #
-        # tweets = self.tweetsDB.find({}).sort("tweetstamp", -1).limit(lim)
-        # for t in tweets:
-        #     results["items"].append({
-        #         "id": str(t["_id"]),
-        #         "username": t["username"],
-        #         "content": t["content"],
-        #         "timestamp": t["tweetstamp"]
-        #     })
+                results["items"].append({"id": str(tweet["_id"]), "username": tweet["username"], "content": tweet["content"], "timestamp": tweet["tweetstamp"]})
+
         return results
 
     # this will follow or unfollow a user

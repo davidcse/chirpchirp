@@ -89,7 +89,7 @@ class tweetdb:
 
     # deletes tweet associated with id
     def delete_tweet(self, id):
-        result = self.tweetsDB.delete_one({"id": ObjectId(id)})
+        result = self.tweetsDB.delete_one({"_id": ObjectId(id)})
         return "Success" if result.deleted_count == 1 else "Failure"
 
     # search query

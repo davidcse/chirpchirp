@@ -105,7 +105,7 @@ class tweetdb:
             for word in searchmodel.q:
                 if word != ".*":
                     word = r"\b{}\b".format(word)
-                filtered_tweets = self.tweetsDB.find({"username": searchmodel.username, "content": {"$regex": word}, "tweetstamp": {"$lte": searchmodel.tweetstamp}})
+                filtered_tweets = self.tweetsDB.find({"username": searchmodel.username, "content": {"$regex": word}, "tweetstamp": {"$lte": searchmodel.tweetstamp}}).limit(searchmodel.limit)
                 for tweet in filtered_tweets:
                     if len(results["items"]) >= searchmodel.limit:
                         return results
@@ -121,13 +121,13 @@ class tweetdb:
         # filter by users that the logged in user is following
         if searchmodel.following == True:
             # get users logged in user is following
-            following_users = self.followsDB.find({"follower_username": loggedin_username})
+            following_users = self.followsDB.find({"follower_username": loggedin_username}).limit(searchmodel.limit)
             for user in following_users:
                 # if query string is specified fix hereeeee
                 for word in searchmodel.q:
                     if word != ".*":
                         word = r"\b{}\b".format(word)
-                    tweets = self.tweetsDB.find({"content": {"$regex": word}, "username": user["username"], "tweetstamp": {"$lte": searchmodel.tweetstamp}})
+                    tweets = self.tweetsDB.find({"content": {"$regex": word}, "username": user["username"], "tweetstamp": {"$lte": searchmodel.tweetstamp}}).limit(searchmodel.limit)
                     for tweet in tweets:
                         if len(results["items"]) >= searchmodel.limit:
                             break
@@ -144,7 +144,7 @@ class tweetdb:
             for word in searchmodel.q:
                 if word != ".*":
                     word = r"\b{}\b".format(word)
-                tweets = self.tweetsDB.find({"content": {"$regex": word},"tweetstamp": {"$lte": searchmodel.tweetstamp}})
+                tweets = self.tweetsDB.find({"content": {"$regex": word},"tweetstamp": {"$lte": searchmodel.tweetstamp}}).limit(searchmodel.limit)
                 for tweet in tweets:
                     if len(results["items"]) >= searchmodel.limit:
                         break

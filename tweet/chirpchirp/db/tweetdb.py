@@ -1,4 +1,6 @@
 import time
+
+import pymongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from pymongo.errors import DuplicateKeyError
@@ -24,6 +26,7 @@ class tweetdb:
         # ensure that both email and username form a joint unique key
         self.userDB.create_index("username", unique=True)
         self.userDB.create_index("email", unique=True)
+        self.tweetsDB.create_index([("username", pymongo.ASCENDING), ("tweetstamp", pymongo.ASCENDING)])
 
     # insert disabled user
     def insertdisable(self):
@@ -116,7 +119,6 @@ class tweetdb:
                             "content": tweet["content"],
                             "timestamp": tweet["tweetstamp"]
                         })
-
             return results
         # filter by users that the logged in user is following
         if searchmodel.following == True:

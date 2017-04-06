@@ -165,7 +165,7 @@ class tweetdb:
         if follow_model.follow == True:
             print curr_uname, 'following', follow_model.username
             # insert into database, without duplicates.
-            self.followsDB.update_one({
+            self.followsDB.insert({
                 "username": follow_model.username,
                 "follower_username": curr_uname
             })

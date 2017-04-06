@@ -7,11 +7,26 @@ def defaultpage(request):
     return render(request, "chirpchirp/index.html")
 
 
+
+
 # Page used to render profile cards of other users to follow.
 def followpage(request):
     if not auth.auth_session(request):
         return defaultpage(request)
     return render(request,"chirpchirp/followpage.html")
+
+
+# Page used to search for a specific tweet
+def tweetsearchpage(request):
+    if not auth.auth_session(request):
+        return defaultpage(request)
+    return render(request,"chirpchirp/tweetsearchpage.html")
+
+
+# search user profiles from this page, anyone can access.
+# /profile
+def searchprofilepage(request):
+    return render(request,"chirpchirp/profilepage.html")
 
 
 def homepage(request):

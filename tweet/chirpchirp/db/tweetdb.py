@@ -123,10 +123,11 @@ class tweetdb:
         if follow_model.follow == True:
             print curr_uname, 'following', follow_model.username
             # insert into database, without duplicates.
-            self.followsDB.update_one({
+            upsert_record = {
                 "username": follow_model.username,
                 "follower_username": curr_uname
-            },upsert=True)
+            }
+            self.followsDB.update_one(upsert_record,{'$set':upsert_record},upsert=True)
         elif follow_model.follow == False:
             print curr_uname, 'unfollowing', follow_model.username
             # delete record representing a follow relationship
@@ -163,6 +164,9 @@ class tweetdb:
     # Gets user profile information
     def retrieve_user(self, username):
         doc = self.userDB.find_one({"username": username})
+        print "tweetdb(166)", "retrieved user:", str(doc)
+        if(doc==None):
+            return None
         following_count = self.followsDB.find({"follower_username": username}).count()
         followers_count = self.followsDB.find({"username": username}).count()
         results = {

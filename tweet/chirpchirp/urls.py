@@ -29,6 +29,8 @@ urlpatterns = [
     url(r'^user/(?P<username>[\w\d]+)/followers/?$', follow.followers, name='followers'),
     # /user/<username>/following
     url(r'^user/(?P<username>[\w\d]+)/following/?$', follow.following, name='following'),
+    # /profile
+    url(r'^profile/?$', views.searchprofilepage, name='searchprofilepage'),
 
 
     # /homepage

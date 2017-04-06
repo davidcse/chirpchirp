@@ -12,32 +12,36 @@ function tweetAjaxPost(tweet){
   });
 }
 
-function createTweetDomContainer(user,tweet){
-    return '\
-    <div class="row">\
-      <div class="col-sm-3">\
-        <div class="well">\
-         <p><strong>@'+username+'<strong></p>\
-        </div>\
+function createTweetDomContainer(user,tweet,wellOption){
+  var well = "";
+  if(wellOption){
+    well="well";
+  }
+  return '\
+  <div class="row">\
+    <div class="col-sm-3">\
+      <div class="'+well+'">\
+       <p><strong>@'+username+'<strong></p>\
       </div>\
-      <div class="col-sm-9">\
-        <div class="well">\
-          <p>'+ tweet + '</p>\
-        </div>\
+    </div>\
+    <div class="col-sm-9">\
+      <div class="'+well+'">\
+        <p>'+ tweet + '</p>\
       </div>\
-    </div>'
+    </div>\
+  </div>';
 }
 
 //render the view of tweets in tweet feed list
 function renderTweetFeedList(username, tweet){
-  var listElement = createTweetDomContainer(username,tweet);
+  var listElement = createTweetDomContainer(username,tweet,true);
   $("#tweetFeedList").append(listElement);
 }
 
 // get a single tweet by id and render it to itemResult div.
 function renderTweetItem(username,tweet){
   $("#itemResult").html(''); // clear previous list elements
-  var listElement = createTweetDomContainer(username,tweet);
+  var listElement = createTweetDomContainer(username,tweet,false);
   $("#itemResult").append(listElement);
 }
 

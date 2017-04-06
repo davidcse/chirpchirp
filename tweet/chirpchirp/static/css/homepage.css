@@ -2,8 +2,14 @@
 footer {
 	background-color: #555;
 	color: white;
-	padding: 15px;
+	padding: 5px;
+	text-align: center;
+	position: fixed;
+	bottom:0px;
+	width:100%;
 }
+
+
 
 /*body {
 	font-family: "Lato", sans-serif;

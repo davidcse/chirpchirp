@@ -2,17 +2,17 @@ from .. utils import responses
 from .. db.tweetdb import tweetdb
 from .. models.followmodel import FollowModel
 from django.views.decorators.csrf import csrf_exempt
+from .. utils import auth
 
 
 # /follow {username, follow=True}
 @csrf_exempt
 def follow(request):
+    if(not auth.auth_session(request)):
+        return responses.err_response("Please login before following");
     uid = request.session.get("uid", None)
     uname = request.session.get("uname", None)
-    print 'uid', uid
-    print 'uname', uname
-    if uid is None:
-        return responses.err_response("Please login before following.")
+    print 'follow(15)','uid', uid,'uname', uname
     # get request model
     f_model = FollowModel(request=request)
     # connect to mongo
@@ -28,9 +28,12 @@ def follow(request):
 
 # /user/<username>
 def user(request, username):
+    print 'follow.py(30)', username
     db = tweetdb()
     r = db.retrieve_user(username)
     db.close()
+    if(r==None):
+        return responses.err_response("User Not Found:"+username)
     return responses.returnresp(r)
 
 

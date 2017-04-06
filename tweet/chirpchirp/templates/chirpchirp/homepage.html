@@ -11,7 +11,6 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="{% static "js/homepage.js" %}" type="text/javascript"></script>
   <script src="{% static "js/tweetBox.js" %}" type="text/javascript"></script>
-  <script src="{% static "js/homepageAngular.js" %}" type="text/javascript"></script>
   <link rel="stylesheet" href="{% static "css/homepage.css"%}">
   <script>
     var username = "{{username}}";
@@ -23,17 +22,12 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Tweet</a>
+      <a class="navbar-brand" href="/">Tweet</a>
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Follow Users</a></li>
-        <li><a href="#">Search Tweets</a></li>
+        <li><a href="/profile">Search Users to follow</a></li>
+        <li><a href="/tweetsearchpage">Search Tweets</a></li>
       </ul>
 
 
@@ -50,9 +44,13 @@
           </span>
         </div>
       </form>
+
+      <!-- ==============================================================
+                       NAV BUTTONS
+    ===================================================================== -->
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a href="#"><span class="glyphicon glyphicon-user"></span> My Account</a>
+          <a><span class="glyphicon glyphicon-user"></span> My Account</a>
         </li>
         <li>
           <a href="#" id="logoutButton"><span class="glyphicon glyphicon-log-in"></span> Log Out</a>
@@ -67,23 +65,24 @@
     <div class="col-sm-3 well">
       <div class="well">
         <button class="btn btn-lg"><span class="glyphicon glyphicon-user"></span></button>
-        <div class="leftcontainer">
-              <p class="text-center">
-                <strong>{{username}}<strong>
-              </p>
-              <table class="table">
-                <tr>
-                  <td>Followers</td>
-                  <td>Following</td>
-                </tr>
-                <tr class = "followTableRowContainer">
-                  <td id= "followerCount">{{follower_count}}</td>
-                  <td id= "followingCount">{{following_count}}</td>
-                </tr>
-              </table>
-        </div>
+            <div class="leftcontainer">
+                <p class="text-center">
+                  <strong>{{username}}<strong>
+                </p>
+                <table class="table">
+                  <tr>
+                    <td>Followers</td>
+                    <td>Following</td>
+                  </tr>
+                  <tr class = "followTableRowContainer">
+                    <td id= "followerCount">{{follower_count}}</td>
+                    <td id= "followingCount">{{following_count}}</td>
+                  </tr>
+                </table>
+            </div>
       </div>
-      <div class="well">
+
+      <!-- <div class="well">
         <p><a href="#">Interests</a></p>
         <p>
           <span class="label label-default">News</span>
@@ -93,40 +92,35 @@
           <span class="label label-warning">Gaming</span>
           <span class="label label-danger">Friends</span>
         </p>
-      </div>
-      <div class="alert alert-success fade in">
+      </div> -->
+      <!-- <div class="alert alert-success fade in">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
         <p><strong>Ey!</strong></p>
         People are looking at your profile. Find out who.
-      </div>
+      </div> -->
+<!--
       <p><a href="#">Link</a></p>
       <p><a href="#">Link</a></p>
-      <p><a href="#">Link</a></p>
+      <p><a href="#">Link</a></p> -->
     </div>
-    <div class="col-sm-7">
 
+    <div class="col-sm-6">
       <div class="row">
         <div class="col-sm-12">
           <div class="panel panel-default text-left">
             <div class="panel-body">
               <div class="tweetbox-container">
                   <div class=" tweetbox row">
-                    <div class="col-md-1">
-                      <strong id="charLeft">140</strong>
-                    </div>
                     <div class="col-md-10">
                       <textarea class="form-control" id="tweetText" placeholder="What's up?" rows="1"></textarea>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                       <button id="postTweetButton" type="button" class="btn btn-info btn-sm">
                         <span class="glyphicon glyphicon-comment"></span>
                       </button>
                     </div>
                   </div>
               </div>
-
-
-
             </div>
           </div>
         </div>
@@ -138,33 +132,20 @@
           </div>
         </div>
     </div>
-    <div class="col-sm-2 well">
-      <input type="text" class="form-control" id="searchItemField" placeholder="Search By ID">
-      <button id="searchItem" class="btn btn-info btn-sm pull-right" type="button">Search Tweet ID</button><br>
+    <div class="col-sm-3 well">
+      <form class="navbar-form" method="get" role="search">
+        <h5>Search By Tweet ID</h5>
+        <div class="input-group">
+          <input type="text" class="form-control" id="searchItemField" placeholder="Search">
+          <div class="input-group-btn">
+            <button id="searchItem" type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-search"></i></button>
+          </div>
+        </div>
+      </form>
+
       <br>
       <ul class="well" id="itemResult">
       </ul>
-
-      <p class="lead">Follow Someone</p>
-      <div class="list-group">
-          <a href="#" class="list-group-item">Person1</a>
-          <a href="#" class="list-group-item">Person2</a>
-          <a href="#" class="list-group-item">Person3</a>
-      </div>
-
-      <div class="thumbnail">
-        <p>Upcoming Events:</p>
-        <img src="paris.jpg" alt="Paris" width="400" height="300">
-        <p><strong>Paris</strong></p>
-        <p>Fri. 27 November 2015</p>
-        <button class="btn btn-primary">Info</button>
-      </div>
-      <div class="well">
-        <p>ADS</p>
-      </div>
-      <div class="well">
-        <p>ADS</p>
-      </div>
     </div>
   </div>
 </div>

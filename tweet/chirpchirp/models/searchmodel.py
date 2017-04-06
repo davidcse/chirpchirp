@@ -14,6 +14,7 @@ class searchmodel:
         self.limit = limit
         # search query, default to any string
         self.q = params.get("q", ".*")
+        self.q = self.q.split(" ")
         # username
         self.username = params.get("username", None)
         # following param

@@ -99,6 +99,22 @@ class tweetdb:
             "status": "OK",
             "items": []
         }
+        # filter by username
+        if searchmodel.username != None:
+            for word in searchmodel.q:
+                if word != ".*":
+                    word = r"\b{}\b".format(word)
+                filtered_tweets = self.tweetsDB.find({"username": searchmodel.username, "content": {"$regex": word}, "tweetstamp": {"$lte": searchmodel.tweetstamp}})
+                for tweet in filtered_tweets:
+                    if len(results["items"]) >= searchmodel.limit:
+                        return results
+                    if tweet["content"] not in results["items"]:
+                        results["items"].append({
+                            "id": str(tweet["_id"]),
+                            "username": tweet["username"],
+                            "content": tweet["content"],
+                            "timestamp": tweet["tweetstamp"]
+                        })
         # filter by users that the logged in user is following
         if searchmodel.following == True:
             # get users logged in user is following

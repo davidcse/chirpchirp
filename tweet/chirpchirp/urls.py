@@ -31,7 +31,8 @@ urlpatterns = [
     url(r'^user/(?P<username>[\w\d]+)/following/?$', follow.following, name='following'),
     # /profile
     url(r'^profile/?$', views.searchprofilepage, name='searchprofilepage'),
-
+    # /tweetsearch
+    url(r'^tweetsearch/?$', views.tweetsearchpage, name='tweetsearchpage'),
 
     # /homepage
     url(r'^homepage$', views.homepage, name="homepage"),

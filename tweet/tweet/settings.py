@@ -26,7 +26,7 @@ SECRET_KEY = '9#+po(d(&z24&9wlr8*$l_%68qkrdz$x0g4r5x4dlkmuvz8kgo'
 #DEBUG = True
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'appservers']
+ALLOWED_HOSTS = ['0.0.0.0', 'appservers','localhost']
 
 
 # Application definition
@@ -90,8 +90,8 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         # 'LOCATION': '130.245.168.186:11211',
         # config server will run memcached
-        'LOCATION': '192.168.1.39:11211',
-        # 'LOCATION': '127.0.0.1:11211',
+        # 'LOCATION': '192.168.1.39:11211',
+        'LOCATION': '127.0.0.1:11211',
     }
 }
 

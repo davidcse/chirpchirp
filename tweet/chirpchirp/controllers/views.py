@@ -38,8 +38,8 @@ def homepage(request):
     results = db.retrieve_user(username)
     follower_count, following_count = 0,0
     if(results):
-        follower_count = follower_count
-        following_count = following_count
+        follower_count = results.get("user").get("followers")
+        following_count = results.get("user").get("following")
     context = {
         'username': username,
         'follower_count':follower_count,

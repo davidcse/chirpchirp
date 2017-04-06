@@ -4,15 +4,16 @@ from .. models.tweetmodel import tweetmodel
 from .. models.searchmodel import searchmodel
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from .. utils import auth
 
 
 # creates a new tweet {content}
 @csrf_exempt
 def additem(request):
-    uid = request.session.get("uid", None)
-    uname = request.session.get("uname", None)
-    if uid is None:
+    if not auth.auth_session(request):
         return responses.err_response("Please login before adding item")
+    uname = request.session.get("uname","")
+    uid = request.session.get("uid","")
     t = tweetmodel(uname, uid, request)
     db = tweetdb(tweet=t)
     tid = db.posttweet()
@@ -39,9 +40,9 @@ def item(request, id):
 # {timestamp, limit}
 @csrf_exempt
 def search(request):
-    uname = request.session.get("uname", None)
-    if uname is None:
-        return responses.err_response("Please using search")
+    if not auth.auth_session(request):
+        return responses.err_response("Please log in before using search")
+    uname = request.session.get("uname", "")
     tsearch = searchmodel(request)
     db = tweetdb(search=tsearch)
     r = db.tweetsearch(loggedin_username=uname)

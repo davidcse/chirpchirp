@@ -15,8 +15,8 @@ class tweetdb:
         self.search = search
         self.follow = follow
         # connect to mongo, eventually migrate to sharding...
-        # self.client = MongoClient('127.0.0.1', 27017)
-        self.client = MongoClient('192.168.1.32', 27017)
+        self.client = MongoClient('127.0.0.1', 27017)
+        # self.client = MongoClient('192.168.1.32', 27017)
         self.db = self.client.tweet
         self.userDB = self.db.user
         self.tweetsDB = self.db.tweets

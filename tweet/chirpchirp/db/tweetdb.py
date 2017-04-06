@@ -168,7 +168,7 @@ class tweetdb:
             self.followsDB.update_one({
                 "username": follow_model.username,
                 "follower_username": curr_uname
-            },upsert=True)
+            })
         elif follow_model.follow == False:
             print curr_uname, 'unfollowing', follow_model.username
             # delete record representing a follow relationship

@@ -24,9 +24,9 @@ class tweetdb:
         self.tweetsDB = self.db.tweets
         self.followsDB = self.db.follows
         # ensure that both email and username form a joint unique key
-        self.userDB.create_index("username", unique=True)
-        self.userDB.create_index("email", unique=True)
-        self.tweetsDB.create_index([("username", pymongo.ASCENDING), ("tweetstamp", pymongo.ASCENDING)])
+        # self.userDB.create_index("username", unique=True)
+        # self.userDB.create_index("email", unique=True)
+        # self.tweetsDB.create_index([("username", pymongo.ASCENDING), ("tweetstamp", pymongo.ASCENDING)])
 
     # insert disabled user
     def insertdisable(self):

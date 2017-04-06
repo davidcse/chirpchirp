@@ -101,6 +101,7 @@ class tweetdb:
         }
         # filter by username
         if searchmodel.username != None:
+            print 'filtering by username: ', searchmodel.username
             for word in searchmodel.q:
                 if word != ".*":
                     word = r"\b{}\b".format(word)
@@ -115,6 +116,8 @@ class tweetdb:
                             "content": tweet["content"],
                             "timestamp": tweet["tweetstamp"]
                         })
+
+            return results
         # filter by users that the logged in user is following
         if searchmodel.following == True:
             # get users logged in user is following

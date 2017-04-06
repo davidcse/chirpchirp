@@ -15,11 +15,8 @@ class tweetdb:
         self.search = search
         self.follow = follow
         # connect to mongo, eventually migrate to sharding...
-        # if not user is None:
-        #     self.client = MongoClient('130.245.168.162',27017)
-        # else:
-        #     self.client = MongoClient('130.245.168.191', 27017)
-        self.client = MongoClient('127.0.0.1', 27017)
+        # self.client = MongoClient('127.0.0.1', 27017)
+        self.client = MongoClient('192.168.1.32', 27017)
         self.db = self.client.tweet
         self.userDB = self.db.user
         self.tweetsDB = self.db.tweets
@@ -96,23 +93,39 @@ class tweetdb:
         return "Success" if result.deleted_count == 1 else "Failure"
 
     # search query
-    def tweetsearch(self):
-        s = self.search
-        stamp = s.tweetstamp
-        lim = s.limit
+    def tweetsearch(self, loggedin_username):
+        searchmodel = self.search
         results = {
             "status": "OK",
             "items": []
         }
-        #
-        tweets = self.tweetsDB.find({}).sort("tweetstamp", -1).limit(lim)
-        for t in tweets:
-            results["items"].append({
-                "id": str(t["_id"]),
-                "username": t["username"],
-                "content": t["content"],
-                "timestamp": t["tweetstamp"]
-            })
+        # filter by users that the logged in user is following
+        if searchmodel.following == True:
+            # get users logged in user is following
+            following_users = self.followsDB.find({"follower_username": loggedin_username})
+            for user in following_users:
+                # if query string is specified fix hereeeee
+                for word in searchmodel.q:
+                    if word != ".*":
+                        word = r"\b{}\b".format(word)
+                    tweets = self.tweetsDB.find({"content": {"$regex": word}, "username": user["username"], "tweetstamp": {"$lte": searchmodel.tweetstamp}})
+                    for tweet in tweets:
+                        if len(results["items"]) >= searchmodel.limit:
+                            break
+                        if tweet["content"] not in results["items"]:
+                            results["items"].append(tweet["content"])
+        else:
+            # don't filter by users that user is following
+            # if query string is specified
+            for word in searchmodel.q:
+                if word != ".*":
+                    word = r"\b{}\b".format(word)
+                tweets = self.tweetsDB.find({"content": {"$regex": word},"tweetstamp": {"$lte": searchmodel.tweetstamp}})
+                for tweet in tweets:
+                    if len(results["items"]) >= searchmodel.limit:
+                        break
+                    if tweet["content"] not in results["items"]:
+                        results["items"].append(tweet["content"])
         return results
 
     # this will follow or unfollow a user

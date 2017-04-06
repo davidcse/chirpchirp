@@ -1,7 +1,10 @@
 # chirpchirp
 
 
-
+sudo apt-get install python2.7-dev
+sudo apt-get install python-pip
+sudo pip install uwsgi
+sudo uwsgi --http :80 --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 4 --threads 1
 
 ```
 source bin/activate
@@ -70,4 +73,12 @@ sudo pip install python-memcached
 <br>
 
 Using uwsgi,
-sudo uwsgi --http :80 --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 4 --threads 2
+sudo python manage.py runserver 0.0.0.0:80
+sudo uwsgi --http :80 --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 4 --threads 1
+
+
+# MongoDB sharding
+user: {_id, username, password, verified, email}<br>
+tweets: {_id, username, content, uid, tweetstamp}<br>
+follows: {_id, username, follower_username}
+

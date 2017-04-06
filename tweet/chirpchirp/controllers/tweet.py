@@ -27,7 +27,9 @@ def item(request, id):
     if request.method == "DELETE":
         delete_response = db.delete_tweet(id)
         db.close()
-        return HttpResponse(delete_response)
+        if delete_response == "Success":
+            return HttpResponse(status=200)
+        return HttpResponse(status=400)
     # insert tweet on POST request
     r = db.itemsearch(id)
     db.close()
@@ -37,8 +39,11 @@ def item(request, id):
 # {timestamp, limit}
 @csrf_exempt
 def search(request):
+    uname = request.session.get("uname", None)
+    if uname is None:
+        return responses.err_response("Please using search")
     tsearch = searchmodel(request)
     db = tweetdb(search=tsearch)
-    r = db.tweetsearch()
+    r = db.tweetsearch(loggedin_username=uname)
     db.close()
     return responses.returnresp(r)

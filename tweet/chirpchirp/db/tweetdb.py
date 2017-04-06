@@ -113,7 +113,12 @@ class tweetdb:
                         if len(results["items"]) >= searchmodel.limit:
                             break
                         if tweet["content"] not in results["items"]:
-                            results["items"].append(tweet["content"])
+                            results["items"].append({
+                                "id": str(tweet["_id"]),
+                                "username": tweet["username"],
+                                "content": tweet["content"],
+                                "timestamp": tweet["tweetstamp"]
+                            })
         else:
             # don't filter by users that user is following
             # if query string is specified
@@ -125,7 +130,12 @@ class tweetdb:
                     if len(results["items"]) >= searchmodel.limit:
                         break
                     if tweet["content"] not in results["items"]:
-                        results["items"].append(tweet["content"])
+                        results["items"].append({
+                            "id": str(tweet["_id"]),
+                            "username": tweet["username"],
+                            "content": tweet["content"],
+                            "timestamp": tweet["tweetstamp"]
+                        })
         return results
 
     # this will follow or unfollow a user

@@ -28,9 +28,9 @@ def item(request, id):
     if request.method == "DELETE":
         delete_response = db.delete_tweet(id)
         db.close()
-        if delete_response == "Success":
-            return HttpResponse(status=200)
-        return HttpResponse(status=400)
+        if delete_response == "Failure":
+            return HttpResponse(status=400)
+        return HttpResponse(status=200)
     # insert tweet on POST request
     r = db.itemsearch(id)
     db.close()

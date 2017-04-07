@@ -10,7 +10,7 @@ class searchmodel:
             self.tweetstamp = int(params.get("timestamp"))
         except:
             self.tweetstamp = time.time()
-        limit = params.get("limit", 25)
+        limit = int(params.get("limit", 25))
         # set default
         if limit > 100:
             limit = 100
@@ -21,7 +21,7 @@ class searchmodel:
         # username
         self.username = params.get("username", None)
         # following param
-        self.following = params.get("following", True)
+        self.following = str(params.get("following", True)).lower()== 'true'
         print '=>model:', self.tweetstamp, self.limit, self.q, self.username, self.following
 
 

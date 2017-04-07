@@ -122,6 +122,7 @@ class tweetdb:
             return results
         # filter by users that the logged in user is following
         if searchmodel.following == True:
+            print "tweetdb(125) search is for followed users"
             # get users logged in user is following
             following_users = self.followsDB.find({"follower_username": loggedin_username}).limit(searchmodel.limit)
             for user in following_users:

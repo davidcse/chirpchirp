@@ -31,7 +31,7 @@ function renderFollowList(data,followListDiv){
 		for(var i=0;i<data.users.length;i++){
 			var user = data.users[i];
 			console.log("follow user:"+JSON.stringify(user));
-			$(followerListDiv).append(createDomFollower(user));
+			$(followListDiv).append(createDomFollower(user));
 		}
 	}
 }

@@ -14,7 +14,7 @@ class searchmodel:
         # set default
         if limit > 100:
             limit = 100
-        self.limit = limit
+        self.limit = int(limit)
         # search query, default to any string
         self.q = params.get("q", ".*")
         self.q = self.q.split(" ")

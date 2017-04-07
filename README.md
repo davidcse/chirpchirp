@@ -76,6 +76,9 @@ Using uwsgi,
 sudo python manage.py runserver 0.0.0.0:80
 sudo uwsgi --http :80 --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 4 --threads 1
 
+sudo python manage.py runserver 0.0.0.0:8000
+sudo uwsgi --http :8000 --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 1 --threads 1
+
 
 # MongoDB sharding
 user: {_id, username, password, verified, email}<br>

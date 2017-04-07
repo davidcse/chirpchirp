@@ -10,11 +10,11 @@ class searchmodel:
             self.tweetstamp = int(params.get("timestamp"))
         except:
             self.tweetstamp = time.time()
-        limit = params.get("limit", 25)
+        limit = int(params.get("limit", 25))
         # set default
         if limit > 100:
             limit = 100
-        self.limit = limit
+        self.limit = int(limit)
         # search query, default to any string
         self.q = params.get("q", ".*")
         self.q = self.q.split(" ")

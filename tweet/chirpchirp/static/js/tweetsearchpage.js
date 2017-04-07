@@ -15,11 +15,19 @@ function logoutHandler(){
 
 
 // create dom element to wrap around search results.
-function createDomTweet(username, tweet){
+function createDomTweet(username, tweet,tweetId){
   return '\
-  <li class="list-group-item">'
-  +"@" + username + "\t" + tweet +
-  '</li>';
+  <li>\
+	  <div class="wells col-md-2">\
+		 		<p><strong>@' + username + '</strong></p>\
+			</div>\
+			<div class="wells col-md-8"><p>'
+			 + tweet +
+	  	'</p></div>\
+			<div class="wells col-md-2"><p>'
+			 + tweetId +
+			'</p></div>\
+	</li>';
 }
 
 
@@ -30,7 +38,7 @@ function renderTweetResults(data,tweetListDiv){
 		for(var i=0;i<data.items.length;i++){
 			var tweet = data.items[i];
 			console.log("tweet:"+JSON.stringify(tweet));
-			$(tweetListDiv).append(createDomTweet(tweet.username,tweet.content));
+			$(tweetListDiv).append(createDomTweet(tweet.username,tweet.content,tweet.id));
 		}
 	}
 }
@@ -96,7 +104,6 @@ function searchTweetAjax(searchObject){
 		renderTweetResults(data,"#tweetResults");
 	});
 }
-
 
 $(document).ready(function(){
 	logoutHandler();

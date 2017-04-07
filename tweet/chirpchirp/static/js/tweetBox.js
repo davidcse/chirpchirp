@@ -52,7 +52,6 @@ function postTweetHandler(){
 		var tweetContent = $('#tweetText').val();
     tweetAjaxPost(tweetContent)
 	});
-  console.log("tweethandler ready");
 }
 
 function searchFieldHandler(){
@@ -83,29 +82,7 @@ function searchFieldHandler(){
 }
 
 
-function searchItemHandler(){
-  $("#searchItem").click(function(e){
-    e.preventDefault();
-    var tweetId = $("#searchItemField").val();
-    console.log("getting /item: "+ tweetId);
-    $.ajax({
-      type: "get",
-      url: "/item/"+tweetId,
-      timeout: 2000
-    }).done(function(data){
-      console.log("received from server:"+JSON.stringify(data));
-      if(data.status !="OK"){
-        console.log("encountered server error");
-        return
-      }
-      renderTweetItem(data.item.username, data.item.content);
-    });
-  });
-}
-
 $(document).ready(function(){
   // bind handlers
   postTweetHandler();
-  searchFieldHandler();
-  searchItemHandler();
 });

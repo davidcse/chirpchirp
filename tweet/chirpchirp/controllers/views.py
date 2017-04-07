@@ -7,6 +7,14 @@ def defaultpage(request):
     return render(request, "chirpchirp/index.html")
 
 
+# Page used to render profile cards of other users to follow.
+def userpage(request):
+    if not auth.auth_session(request):
+        return defaultpage(request)
+    username = request.session.get("uname","")
+
+    return render(request,"chirpchirp/userpage.html",{"username":username})
+
 
 
 # Page used to render profile cards of other users to follow.

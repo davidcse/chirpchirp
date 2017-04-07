@@ -33,7 +33,8 @@ urlpatterns = [
     url(r'^profile/?$', views.searchprofilepage, name='searchprofilepage'),
     # /tweetsearch
     url(r'^tweetsearch/?$', views.tweetsearchpage, name='tweetsearchpage'),
-
+    # /userpage
+    url(r'^userpage/?$', views.userpage, name='userpage'),
     # /homepage
     url(r'^homepage$', views.homepage, name="homepage"),
     # /index

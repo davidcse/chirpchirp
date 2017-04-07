@@ -6,7 +6,10 @@ class searchmodel:
     def __init__(self, request):
         body = request.body
         params = json.loads(body) # expects stringified json
-        self.tweetstamp = int(params.get("timestamp", time.time()))
+        try:
+            self.tweetstamp = int(params.get("timestamp"))
+        except:
+            self.tweetstamp = time.time()
         limit = params.get("limit", 25)
         # set default
         if limit > 100:

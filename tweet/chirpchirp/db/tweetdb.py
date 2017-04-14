@@ -4,6 +4,7 @@ import pymongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from pymongo.errors import DuplicateKeyError
+import .. utils.searchDelegate
 # main file for database transactions
 
 
@@ -104,61 +105,15 @@ class tweetdb:
         }
         # filter by username
         if searchmodel.username != None:
-            print 'filtering by username: ', searchmodel.username
-            for word in searchmodel.q:
-                if word != ".*":
-                    word = r"\b{}\b".format(word)
-                filtered_tweets = self.tweetsDB.find({"username": searchmodel.username, "content": {"$regex": word}, "tweetstamp": {"$lte": searchmodel.tweetstamp}}).limit(searchmodel.limit)
-                for tweet in filtered_tweets:
-                    if len(results["items"]) >= searchmodel.limit:
-                        return results
-                    if tweet["content"] not in results["items"]:
-                        results["items"].append({
-                            "id": str(tweet["_id"]),
-                            "username": tweet["username"],
-                            "content": tweet["content"],
-                            "timestamp": tweet["tweetstamp"]
-                        })
-            return results
+            return searchDelegate.search_username(searchmodel=searchmodel,tweetsDB=self.tweetsDB,results=results)
         # filter by users that the logged in user is following
         if searchmodel.following == True:
-            print "tweetdb(125) search is for followed users"
-            # get users logged in user is following
-            following_users = self.followsDB.find({"follower_username": loggedin_username}).limit(searchmodel.limit)
-            for user in following_users:
-                # if query string is specified fix hereeeee
-                for word in searchmodel.q:
-                    if word != ".*":
-                        word = r"\b{}\b".format(word)
-                    tweets = self.tweetsDB.find({"content": {"$regex": word}, "username": user["username"], "tweetstamp": {"$lte": searchmodel.tweetstamp}}).limit(searchmodel.limit)
-                    for tweet in tweets:
-                        if len(results["items"]) >= searchmodel.limit:
-                            break
-                        if tweet["content"] not in results["items"]:
-                            results["items"].append({
-                                "id": str(tweet["_id"]),
-                                "username": tweet["username"],
-                                "content": tweet["content"],
-                                "timestamp": tweet["tweetstamp"]
-                            })
+            return searchDelegate.search_following(loggedin_username=loggedin_username,followsDB=self.followsDB,tweetsDB=self.tweetsDB,searchmodel=searchmodel,results=results)
         else:
             # don't filter by users that user is following
             # if query string is specified
-            for word in searchmodel.q:
-                if word != ".*":
-                    word = r"\b{}\b".format(word)
-                tweets = self.tweetsDB.find({"content": {"$regex": word},"tweetstamp": {"$lte": searchmodel.tweetstamp}}).limit(searchmodel.limit)
-                for tweet in tweets:
-                    if len(results["items"]) >= searchmodel.limit:
-                        break
-                    if tweet["content"] not in results["items"]:
-                        results["items"].append({
-                            "id": str(tweet["_id"]),
-                            "username": tweet["username"],
-                            "content": tweet["content"],
-                            "timestamp": tweet["tweetstamp"]
-                        })
-        return results
+            return searchDelegate.search_not_following(tweetsDB=self.tweetsDB, searchmodel=searchmodel, results=results)
+
 
     # this will follow or unfollow a user
     def follow_or_unfollow(self, curr_uname):

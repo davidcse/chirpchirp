@@ -1,5 +1,5 @@
 from .. utils import responses
-from .. db.tweetdb import tweetdb
+from .. db.tweetdb import TweetDB
 from .. models.usermodel import usermodel
 from django.views.decorators.csrf import csrf_exempt
 
@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def adduser(request):
     u = usermodel(request)
-    db = tweetdb(user=u)
+    db = TweetDB(user=u)
     # actually add user here
     success = db.insertdisable()
     db.close()
@@ -24,7 +24,7 @@ def adduser(request):
 @csrf_exempt
 def verify(request):
     u = usermodel(request)
-    db = tweetdb(user=u)
+    db = TweetDB(user=u)
     success = db.verifyuser()
     db.close()
     if success:
@@ -38,7 +38,7 @@ def verify(request):
 def login(request):
     # used to login
     u = usermodel(request)
-    db = tweetdb(user=u)
+    db = TweetDB(user=u)
     # verify user and account details
     if db.isverified() == False:
         db.close()

@@ -2,7 +2,7 @@ from django.conf.urls import url
 from controllers import user
 from controllers import tweet
 from controllers import views
-from controllers import testEndpoint
+from controllers import testendpoint
 from controllers import follow
 from controllers import media
 
@@ -18,7 +18,9 @@ urlpatterns = [
     # /additem
     url(r'^additem/?$', tweet.additem, name='additem'),
     # /item/<id>
-    url(r'^item/(?P<id>[\w]+)/?$', tweet.item, name="item"),
+    url(r'^item/(?P<id>[\w\d]+)/?$', tweet.item, name="item"),
+    # /item/<id>/like
+    url(r'^item/(?P<id>[\w\d]+)/like/?$', tweet.like, name="item"),
     # /search
     url(r'^search/?$', tweet.search, name="search"),
     # /follow
@@ -46,7 +48,7 @@ urlpatterns = [
     url(r'^$', views.index, name="index"),
 
     # /test/homepage
-    url(r'^test/homepage$', testEndpoint.homepage, name="testhomepage"),
+    url(r'^test/homepage$', testendpoint.homepage, name="testhomepage"),
     # /test/index
-    url(r'^test/index$', testEndpoint.index, name="testindex")
+    url(r'^test/index$', testendpoint.index, name="testindex")
 ]

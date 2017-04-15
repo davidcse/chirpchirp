@@ -10,7 +10,7 @@ from pymongo.errors import DuplicateKeyError
 
 # @Todo refactor this class
 # Serves as a mongoDB client
-class tweetdb:
+class TweetDB:
     def __init__(self, user=None, tweet=None, search=None, follow=None):
         # set models
         self.user = user
@@ -67,8 +67,13 @@ class tweetdb:
             "uid": t.uid,
             "username": t.uname,
             "content": t.content,
-            "tweetstamp": int(time.time())
+            "tweetstamp": int(time.time()),
+            "likes": 0
         }))
+
+    # increase number of tweets by one
+    def like_tweet(self, id):
+        self.tweetsDB.update({'_id': ObjectId(id)}, {'$inc': {'likes': 1}})
 
     # individual tweet search
     def itemsearch(self, id):
@@ -232,7 +237,6 @@ class tweetdb:
     # retrieves media
     def get_media(self, mid):
         media = self.mediaDB.find_one({"_id": ObjectId(mid)})
-        print 'media', media
         return media["content"]
 
     # close mongo connection

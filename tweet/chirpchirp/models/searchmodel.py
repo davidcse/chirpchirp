@@ -23,7 +23,3 @@ class searchmodel:
         # following param
         self.following = str(params.get("following", True)).lower()== 'true'
         print '=>model:', self.tweetstamp, self.limit, self.q, self.username, self.following
-
-
-    def fo(self):
-        print r''

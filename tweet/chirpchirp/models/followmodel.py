@@ -7,4 +7,4 @@ class FollowModel:
         body = request.body
         params = json.loads(body)
         self.username = params.get("username", "")
-        self.follow = params.get("follow", True)
+        self.follow = str(params.get("follow", True)).lower() == 'true'

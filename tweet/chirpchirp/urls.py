@@ -4,7 +4,7 @@ from controllers import tweet
 from controllers import views
 from controllers import testEndpoint
 from controllers import follow
-
+from controllers import media
 
 urlpatterns = [
     # /adduser
@@ -29,6 +29,10 @@ urlpatterns = [
     url(r'^user/(?P<username>[\w\d]+)/followers/?$', follow.followers, name='followers'),
     # /user/<username>/following
     url(r'^user/(?P<username>[\w\d]+)/following/?$', follow.following, name='following'),
+    # adds media
+    url(r'^addmedia', media.add_media, name='addmedia'),
+    # retrieves media
+    url(r'^media/(?P<id>[\w\d]+)?$', media.retrieve, name='media'),
     # /profile
     url(r'^profile/?$', views.searchprofilepage, name='searchprofilepage'),
     # /tweetsearch
@@ -37,6 +41,7 @@ urlpatterns = [
     url(r'^userpage/?$', views.userpage, name='userpage'),
     # /homepage
     url(r'^homepage$', views.homepage, name="homepage"),
+
     # /index
     url(r'^$', views.index, name="index"),
 

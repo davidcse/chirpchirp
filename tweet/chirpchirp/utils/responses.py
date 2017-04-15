@@ -17,9 +17,8 @@ def err_response(errmsg):
             "error": errmsg
     })
 
-
-def tweet(tid):
+def id_response(id):
     return JsonResponse({
         "status": "OK",
-        "id": tid
+        "id": id
     })

@@ -1,5 +1,4 @@
 from .. utils import responses
-from .. utils import auth
 from .. db.tweetdb import tweetdb
 from .. models.usermodel import usermodel
 from django.views.decorators.csrf import csrf_exempt

@@ -18,7 +18,7 @@ def additem(request):
     db = tweetdb(tweet=t)
     tid = db.posttweet()
     db.close()
-    return responses.tweet(tid)
+    return responses.id_response(tid)
 
 
 # /item/<id> retrieve/delete

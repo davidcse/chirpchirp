@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+
+# please add this in order to grant execution privlidges
 # chmod +x appserver.sh
 
 # script to set up an app server, will be responsible for downloading project, running uwsgi and nginx

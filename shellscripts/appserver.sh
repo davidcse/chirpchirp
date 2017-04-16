@@ -30,6 +30,8 @@ sudo apt-get install python-pip
 echo $seperator "Activate virtual-env" $seperator
 cd chirpchirp
 source bin/activate
+echo $seperator "Moving to /chirpchirp/tweet dir" $seperator
+cd tweet
 echo $seperator "Installing uwsgi" $seperator
 sudo pip install uwsgi
 echo $seperator "Installing django" $seperator
@@ -46,14 +48,12 @@ echo $seperator "Installing Nginx" $seperator
 sudo apt-get install nginx
 
 # confingure nginx
-sudo uwsgi --socket /home/ubuntu/chirp.sock --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 10 --threads 2 --chmod-socket=666 --logto /home/ubuntu/uwsgi.log
+echo $seperator "Launching uwsgi" $seperator
+#sudo uwsgi --socket /home/ubuntu/chirp.sock --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 10 --threads 2 --chmod-socket=666 --logto /home/ubuntu/uwsgi.log --daemonize /home/ubuntu/daemonize.log
+sudo uwsgi --socket /home/ubuntu/chirp.sock --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 1 --threads 1 --chmod-socket=666 --logto /home/ubuntu/uwsgi.log --daemonize /home/ubuntu/daemonize.log
+echo $seperator "Connecting nginx to uwsgi" $seperator
 sudo ln -s /home/ubuntu/chirpchirp/nginxconfig/chirp_nginx.conf /etc/nginx/sites-enabled/
 
-
 # run nginx
-echo $seperator "Stopping nginx (if necessary)" $seperator
-sudo service nginx stop
-echo $seperator "Starting nginx" $seperator
-sudo service nginx start
-echo $seperator "Nginx status" $seperator
-sudo service nginx status
+echo $seperator "Restarting nginx" $seperator
+sudo service nginx restart

@@ -2,6 +2,12 @@
 #   DELEGATOR THAT PERFORMS THE DETAILS OF THE SEARCH PROCESS
 ################################################################
 
+def rank_algorithm(time_posted, likecount,retweetcount):
+    decayfactor = ((1/4)** ( time.time() - time_posted )/60)
+    score = (2 * likecount ) + (2 * retweetcount) + (6* decayfactor)
+    return score
+
+
 def insert_tweet_nonrepeat(tweet,results):
     if tweet["content"] not in results["items"]:
         results["items"].append({

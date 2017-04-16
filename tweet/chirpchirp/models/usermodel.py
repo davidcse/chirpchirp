@@ -1,7 +1,7 @@
 import json
 
 # used for loading a User object on a request
-class usermodel:
+class UserModel:
     def __init__(self, request):
         body = request.body # expect stringified json
         params = json.loads(body)

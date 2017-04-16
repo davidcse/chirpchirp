@@ -2,7 +2,7 @@ import json
 import time
 
 # helper for a search query
-class searchmodel:
+class SearchModel:
     def __init__(self, request):
         body = request.body
         params = json.loads(body) # expects stringified json

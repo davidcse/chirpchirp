@@ -12,13 +12,14 @@ from .. utils import searchDelegator
 # @Todo refactor this class
 # Serves as a mongoDB client
 class TweetDB:
-    def __init__(self, user=None, tweet=None, search=None, follow=None):
+    def __init__(self, user=None, tweet=None, search=None, follow=None, like=None):
         # set models
         self.user = user
         self.tweet = tweet
         self.search = search
         self.follow = follow
-        # connect to mongo, eventually migrate to sharding...
+        self.like = like
+        # connect to mongo
         self.client = MongoClient('127.0.0.1', 27017)
         # self.client = MongoClient('192.168.1.32', 27017)
         self.db = self.client.tweet
@@ -26,6 +27,7 @@ class TweetDB:
         self.tweetsDB = self.db.tweets
         self.followsDB = self.db.follows
         self.mediaDB = self.db.media
+        self.likesDB = self.db.likes
 
     # insert disabled user
     def insertdisable(self):
@@ -78,8 +80,19 @@ class TweetDB:
         return str(self.tweetsDB.insert(tweetDocument))
 
     # increase number of tweets by one
-    def like_tweet(self, id):
-        self.tweetsDB.update({'_id': ObjectId(id)}, {'$inc': {'likes': 1}})
+    def like_tweet(self, tid, uid):
+        lmodel = self.like
+        like_document = self.likesDB.find_one({"uid": uid, "tid": tid})
+        if like_document != None:
+            if like_document["liked"] == "true" and lmodel.like == True:
+                    return
+            elif like_document["liked"] == "false" and lmodel.like == False:
+                    return
+            self.likesDB.update({"uid": uid, "tid": tid}, {"liked": "true" if lmodel.like == True else "false"})
+        else:
+            self.likesDB.insert({"uid": uid, "tid": tid, "liked": "true" if lmodel.like == True else "false"})
+        amount = 1 if lmodel.like == True else -1
+        self.tweetsDB.update({'_id': ObjectId(tid)}, {'$inc': {'likes': amount}})
 
     # individual tweet search
     def itemsearch(self, id):

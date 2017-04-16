@@ -25,8 +25,19 @@ echo $seperator "Installing python-dev" $seperator
 sudo apt-get install python2.7-dev
 echo $seperator "Installing python-pip" $seperator
 sudo apt-get install python-pip
+
+# activate virtualenv
+echo $seperator "Activate virtual-env" $seperator
+cd chirpchirp
+source bin/activate
 echo $seperator "Installing uwsgi" $seperator
 sudo pip install uwsgi
+echo $seperator "Installing django" $seperator
+sudo pip install django
+echo $seperator "Installing pymongo" $seperator
+sudo pip install pymongo
+echo $seperator "Installing memcached" $seperator
+sudo pip install python-memcached
 
 # install nginx
 echo $seperator "Updating apt-get" $seperator
@@ -35,8 +46,7 @@ echo $seperator "Installing Nginx" $seperator
 sudo apt-get install nginx
 
 # confingure nginx
-#sudo uwsgi --http :80 --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 4 --threads 1
-uwsgi --socket chirp.sock --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 1 --threads 1 --chmod-socket=664
+sudo uwsgi --socket /home/ubuntu/chirp.sock --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 10 --threads 2 --chmod-socket=666 --logto /home/ubuntu/uwsgi.log
 sudo ln -s /home/ubuntu/chirpchirp/nginxconfig/chirp_nginx.conf /etc/nginx/sites-enabled/
 
 

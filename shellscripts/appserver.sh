@@ -31,11 +31,14 @@ sudo apt-get install python-pip
 
 # activate virtualenv
 echo $seperator "Activate virtual-env" $seperator
+sleep 2
 cd chirpchirp
 source bin/activate
 echo $seperator "Moving to /chirpchirp/tweet dir" $seperator
+sleep 2
 cd tweet
 echo $seperator "Collecting static" $seperator
+sleep 2
 python manage.py collectstatic
 
 echo $seperator "Installing uwsgi" $seperator

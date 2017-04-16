@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .. utils import auth
-from .. db.tweetdb import tweetdb
+from .. db.tweetdb import TweetDB
 
 # For unauthenticated users, redirect to standard index page.
 def defaultpage(request):
@@ -42,7 +42,7 @@ def homepage(request):
         return defaultpage(request)
     # render template based on user's data
     username = request.session.get("uname", "")
-    db = tweetdb()
+    db = TweetDB()
     results = db.retrieve_user(username)
     follower_count, following_count = 0,0
     if(results):

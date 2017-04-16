@@ -1,5 +1,5 @@
 from .. utils import responses
-from .. db.tweetdb import tweetdb
+from .. db.tweetdb import TweetDB
 from .. models.followmodel import FollowModel
 from django.views.decorators.csrf import csrf_exempt
 from .. utils import auth
@@ -12,11 +12,10 @@ def follow(request):
         return responses.err_response("Please login before following");
     uid = request.session.get("uid", None)
     uname = request.session.get("uname", None)
-    print 'follow(15)','uid', uid,'uname', uname
     # get request model
     f_model = FollowModel(request=request)
     # connect to mongo
-    db = tweetdb(follow=f_model)
+    db = TweetDB(follow=f_model)
     # perform database transaction
     transaction_status = db.follow_or_unfollow(uname)
     # close connection
@@ -29,7 +28,7 @@ def follow(request):
 # /user/<username>
 def user(request, username):
     print 'follow.py(30)', username
-    db = tweetdb()
+    db = TweetDB()
     r = db.retrieve_user(username)
     db.close()
     if(r==None):
@@ -44,7 +43,7 @@ def followers(request, username):
     limit = int(request.GET.get('limit', 50))
     if limit > 200:
         limit = 200
-    db = tweetdb()
+    db = TweetDB()
     r = db.get_followers(username, limit)
     db.close()
     return responses.returnresp(r)
@@ -56,7 +55,7 @@ def following(request, username):
     limit = int(request.GET.get('limit', 50))
     if limit > 200:
         limit = 200
-    db = tweetdb()
+    db = TweetDB()
     r = db.get_following(username, limit)
     db.close()
     return responses.returnresp(r)

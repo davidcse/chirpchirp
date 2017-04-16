@@ -89,3 +89,8 @@ sudo uwsgi --http :8000 --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py 
 user: {_id, username, password, verified, email}<br>
 tweets: {_id, username, content, uid, tweetstamp}<br>
 follows: {_id, username, follower_username}
+
+
+
+
+ps -ax | grep uwsgi

@@ -1,6 +1,7 @@
 import time
 
 import pymongo
+from bson import Binary
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from pymongo.errors import DuplicateKeyError
@@ -10,7 +11,7 @@ from .. utils import searchDelegator
 
 # @Todo refactor this class
 # Serves as a mongoDB client
-class tweetdb:
+class TweetDB:
     def __init__(self, user=None, tweet=None, search=None, follow=None):
         # set models
         self.user = user
@@ -18,16 +19,13 @@ class tweetdb:
         self.search = search
         self.follow = follow
         # connect to mongo, eventually migrate to sharding...
-        # self.client = MongoClient('127.0.0.1', 27017)
-        self.client = MongoClient('192.168.1.32', 27017)
+        self.client = MongoClient('127.0.0.1', 27017)
+        # self.client = MongoClient('192.168.1.32', 27017)
         self.db = self.client.tweet
         self.userDB = self.db.user
         self.tweetsDB = self.db.tweets
         self.followsDB = self.db.follows
-        # ensure that both email and username form a joint unique key
-        # self.userDB.create_index("username", unique=True)
-        # self.userDB.create_index("email", unique=True)
-        # self.tweetsDB.create_index([("username", pymongo.ASCENDING), ("tweetstamp", pymongo.ASCENDING)])
+        self.mediaDB = self.db.media
 
     # insert disabled user
     def insertdisable(self):
@@ -70,13 +68,18 @@ class tweetdb:
             "uid": t.uid,
             "username": t.uname,
             "content": t.content,
-            "tweetstamp": int(time.time())
+            "tweetstamp": int(time.time()),
+            "likes": 0
         }
         if(t.parent != None):
             tweetDocument["parent"] = t.parent
         if(t.media != None):
             tweetDocument["media"] = t.media
         return str(self.tweetsDB.insert(tweetDocument))
+
+    # increase number of tweets by one
+    def like_tweet(self, id):
+        self.tweetsDB.update({'_id': ObjectId(id)}, {'$inc': {'likes': 1}})
 
     # individual tweet search
     def itemsearch(self, id):
@@ -184,6 +187,18 @@ class tweetdb:
         }
         return results
 
-    # close mongoDB connection
+    # save media file
+    def save_media(self, f):
+        content = f.read()
+        return str(self.mediaDB.insert({
+            "content": Binary(content)
+        }))
+
+    # retrieves media
+    def get_media(self, mid):
+        media = self.mediaDB.find_one({"_id": ObjectId(mid)})
+        return media["content"]
+
+    # close mongo connection
     def close(self):
         self.client.close()

@@ -9,6 +9,12 @@ project_repo="https://github.com/elvis-alexander/chirpchirp"
 project_dest="/home/ubuntu/"
 seperator="---------------------"
 
+# install git
+echo $seperator "Installing Git" $seperator
+sudo apt-get update
+sudo apt-get install git
+
+
 # clone repo
 echo $seperator "Cloning Project" $seperator
 git clone $project_repo $project_dest
@@ -21,6 +27,8 @@ sudo apt-get install nginx
 
 # confingure nginx
 #sudo uwsgi --http :80 --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 4 --threads 1
+sudo ln -s /home/ubuntu/chirpchirp/chirp_nginx.conf /etc/nginx/sites-enabled/
+
 
 # run nginx
 echo $seperator "Stopping nginx (if necessary)" $seperator

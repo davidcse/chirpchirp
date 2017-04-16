@@ -1,7 +1,7 @@
 import json
 
 # used to load a tweet object on a request
-class tweetmodel:
+class TweetModel:
     def __init__(self, uname, uid, request):
         body = request.body # expects stringified json
         params = json.loads(body)

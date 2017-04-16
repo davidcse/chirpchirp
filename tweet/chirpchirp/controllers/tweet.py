@@ -1,7 +1,8 @@
 from .. utils import responses
 from .. db.tweetdb import TweetDB
-from .. models.tweetmodel import tweetmodel
-from .. models.searchmodel import searchmodel
+from .. models.tweetmodel import TweetModel
+from .. models.searchmodel import SearchModel
+from .. models.likemodel import LikeModel
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from .. utils import auth
@@ -14,7 +15,7 @@ def additem(request):
         return responses.err_response("Please login before adding item")
     uname = request.session.get("uname","")
     uid = request.session.get("uid","")
-    t = tweetmodel(uname, uid, request)
+    t = TweetModel(uname, uid, request)
     db = TweetDB(tweet=t)
     tid = db.posttweet()
     db.close()
@@ -39,8 +40,13 @@ def item(request, id):
 # /item/<id>/like
 @csrf_exempt
 def like(request, id):
-    db = TweetDB()
-    db.like_tweet(id)
+    # get current model
+    lmodel = LikeModel(request)
+    # get current user
+    uid = request.session.get("uid", "")
+    db = TweetDB(like=lmodel)
+    # likes or unlike a given tweet
+    db.like_tweet(id, uid)
     return responses.ok_response()
 
 
@@ -50,7 +56,7 @@ def search(request):
     if not auth.auth_session(request):
         return responses.err_response("Please log in before using search")
     uname = request.session.get("uname", "")
-    tsearch = searchmodel(request)
+    tsearch = SearchModel(request)
     db = TweetDB(search=tsearch)
     r = db.tweetsearch(loggedin_username=uname)
     db.close()

@@ -8,9 +8,10 @@ project_repo="https://github.com/elvis-alexander/chirpchirp"
 seperator="---------------------"
 
 # install git
-echo $seperator "Installing Git" $seperator
+echo $seperator "Update apt-get" $seperator
 sleep 2
 sudo apt-get update
+echo $seperator "Installing Git" $seperator
 sudo apt-get install git
 
 # clone repo

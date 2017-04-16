@@ -38,10 +38,5 @@ urlpatterns = [
     # /homepage
     url(r'^homepage$', views.homepage, name="homepage"),
     # /index
-    url(r'^$', views.index, name="index"),
-
-    # /test/homepage
-    url(r'^test/homepage$', testEndpoint.homepage, name="testhomepage"),
-    # /test/index
-    url(r'^test/index$', testEndpoint.index, name="testindex")
+    url(r'^/?$', views.index, name="index")
 ]

@@ -2,20 +2,14 @@
 #   DELEGATOR THAT PERFORMS THE DETAILS OF THE SEARCH PROCESS
 ################################################################
 
-def search_tweet_parent(tweetsDB,searchmodel,results):
-    
-
-
-
-
 def insert_tweet_nonrepeat(tweet,results):
     if tweet["content"] not in results["items"]:
         results["items"].append({
-            "id": str(tweet["_id"]),
-            "username": tweet["username"],
-            "content": tweet["content"],
-            "timestamp": tweet["tweetstamp"]
-        })
+        "id": str(tweet["_id"]),
+        "username": tweet["username"],
+        "content": tweet["content"],
+        "timestamp": tweet["tweetstamp"]
+    })
 
 
 

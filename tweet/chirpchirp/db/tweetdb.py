@@ -4,7 +4,7 @@ import pymongo
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from pymongo.errors import DuplicateKeyError
-import .. utils.searchDelegate
+from .. utils import searchDelegator
 # main file for database transactions
 
 
@@ -66,12 +66,17 @@ class tweetdb:
     # post a tweet
     def posttweet(self):
         t = self.tweet
-        return str(self.tweetsDB.insert({
+        tweetDocument = {
             "uid": t.uid,
             "username": t.uname,
             "content": t.content,
             "tweetstamp": int(time.time())
-        }))
+        }
+        if(t.parent != None):
+            tweetDocument["parent"] = t.parent
+        if(t.media != None):
+            tweetDocument["media"] = t.media
+        return str(self.tweetsDB.insert(tweetDocument))
 
     # individual tweet search
     def itemsearch(self, id):

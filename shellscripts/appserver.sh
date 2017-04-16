@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
-
-
+# chmod +x appserver.sh
 
 # script to set up an app server, will be responsible for downloading project, running uwsgi and nginx
 
 # script variables
 project_repo="https://github.com/elvis-alexander/chirpchirp"
-project_dest="/home/ubuntu/"
 seperator="---------------------"
 
 # install git
@@ -16,7 +14,7 @@ sudo apt-get install git
 
 # clone repo
 echo $seperator "Cloning Project" $seperator
-git clone $project_repo $project_dest
+git clone $project_repo
 
 # install all project dependencies (python related)
 echo $seperator "Update apt-get" $seperator
@@ -57,3 +55,5 @@ sudo ln -s /home/ubuntu/chirpchirp/nginxconfig/chirp_nginx.conf /etc/nginx/sites
 # run nginx
 echo $seperator "Restarting nginx" $seperator
 sudo service nginx restart
+echo $seperator "Nginx Status" $seperator
+sudo service nginx status

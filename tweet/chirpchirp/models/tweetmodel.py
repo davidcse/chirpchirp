@@ -4,6 +4,8 @@
 import json
 import ast
 
+
+# parses a stringified list into a python list with int elements 
 def destring_to_intlist(stringifiedlist):
     # safely evaluates into python list, str, int, tuple
     aList = ast.literal_eval(stringifiedlist)

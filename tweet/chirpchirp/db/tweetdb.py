@@ -71,7 +71,8 @@ class TweetDB:
             "username": t.uname,
             "content": t.content,
             "tweetstamp": int(time.time()),
-            "likes": 0
+            "likes": 0,
+            "retweets": 0
         }
         if(t.parent != None):
             tweetDocument["parent"] = t.parent
@@ -108,7 +109,8 @@ class TweetDB:
                 "id": str(t["_id"]),
                 "username": t["username"],
                 "content": t["content"],
-                "timestamp": t["tweetstamp"]
+                "timestamp": t["tweetstamp"],
+                "media": t.get("media", [])
             }
         }
 

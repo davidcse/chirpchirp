@@ -45,5 +45,5 @@ urlpatterns = [
     url(r'^homepage$', views.homepage, name="homepage"),
 
     # /index
-    url(r'^/?$', views.index, name="index")
+    url(r'^$', views.index, name="index")
 ]

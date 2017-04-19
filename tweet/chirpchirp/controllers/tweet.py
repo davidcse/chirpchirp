@@ -8,6 +8,7 @@ from django.http import HttpResponse
 from .. utils import auth
 
 
+# @Todo implement retweet :)
 # creates a new tweet {content}
 @csrf_exempt
 def additem(request):
@@ -27,11 +28,11 @@ def additem(request):
 def item(request, id):
     db = TweetDB()
     if request.method == "DELETE":
-        delete_response = db.delete_tweet(id)
+        delete_response = db.deletetweet(id)
         db.close()
-        if delete_response == "Failure":
-            return HttpResponse(status=400)
-        return HttpResponse(status=200)
+        if delete_response == True:
+            return HttpResponse(status=200)
+        return HttpResponse(status=400)
     # insert tweet on POST request
     r = db.itemsearch(id)
     db.close()
@@ -46,7 +47,7 @@ def like(request, id):
     uid = request.session.get("uid", "")
     db = TweetDB(like=lmodel)
     # likes or unlike a given tweet
-    db.like_tweet(id, uid)
+    db.liketweet(id, uid)
     return responses.ok_response()
 
 

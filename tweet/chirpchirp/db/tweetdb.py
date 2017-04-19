@@ -1,15 +1,12 @@
 import time
-
-import pymongo
 from bson import Binary
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from pymongo.errors import DuplicateKeyError
 from .. utils import searchDelegator
+
+
 # main file for database transactions
-
-
-# @Todo refactor this class
 # Serves as a mongoDB client
 class TweetDB:
     def __init__(self, user=None, tweet=None, search=None, follow=None, like=None):
@@ -81,7 +78,7 @@ class TweetDB:
         return str(self.tweetsDB.insert(tweetDocument))
 
     # increase number of tweets by one
-    def like_tweet(self, tid, uid):
+    def liketweet(self, tid, uid):
         lmodel = self.like
         like_document = self.likesDB.find_one({"uid": uid, "tid": tid})
         if like_document != None:
@@ -115,9 +112,22 @@ class TweetDB:
         }
 
     # deletes tweet associated with id
-    def delete_tweet(self, id):
-        result = self.tweetsDB.delete_one({"_id": ObjectId(id)})
-        return "Success" if result.deleted_count == 1 else "Failure"
+    # returns True if able to delte completely, False ow
+    def deletetweet(self, id):
+        tweetdoc = self.tweetsDB.find_one({"_id": ObjectId(id)})
+        if tweetdoc == None:
+            return False
+        # delete tweet
+        self.tweetsDB.delete_one({"_id": ObjectId(id)})
+        # retrieve media array (if necessary)
+        mediaArray = tweetdoc.get("media", None)
+        if mediaArray == None:
+            self.tweetsDB.delete_one({"_id": ObjectId(id)})
+        else:
+            # remove all media associated with tweet
+            for media in mediaArray:
+                self.mediaDB.delete_one({"_id": ObjectId(media)})
+        return True
 
     # search query
     def tweetsearch(self, loggedin_username):
@@ -127,15 +137,15 @@ class TweetDB:
             "items": []
         }
         # filter by username
-        if searchmodel.username != None:
-            return searchDelegate.search_username(searchmodel=searchmodel,tweetsDB=self.tweetsDB,results=results)
+        # if searchmodel.username != None:
+        #     return searchDelegate.search_username(searchmodel=searchmodel,tweetsDB=self.tweetsDB,results=results)
         # filter by users that the logged in user is following
-        if searchmodel.following == True:
-            return searchDelegate.search_following(loggedin_username=loggedin_username,followsDB=self.followsDB,tweetsDB=self.tweetsDB,searchmodel=searchmodel,results=results)
-        else:
+        # if searchmodel.following == True:
+        #     return searchDelegate.search_following(loggedin_username=loggedin_username,followsDB=self.followsDB,tweetsDB=self.tweetsDB,searchmodel=searchmodel,results=results)
+        # else:
             # don't filter by users that user is following
             # if query string is specified
-            return searchDelegate.search_not_following(tweetsDB=self.tweetsDB, searchmodel=searchmodel, results=results)
+            # return searchDelegate.search_not_following(tweetsDB=self.tweetsDB, searchmodel=searchmodel, results=results)
 
 
     # this will follow or unfollow a user

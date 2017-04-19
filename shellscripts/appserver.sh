@@ -33,7 +33,7 @@ sleep 2
 sudo apt-get install python-pip
 
 # activate virtualenv
-echo $seperator "Activate virtual-env" $seperator
+echo $seperator "Activating virtual-env" $seperator
 sleep 2
 cd chirpchirp
 source bin/activate

@@ -18,7 +18,7 @@ def additem(request):
     uid = request.session.get("uid","")
     t = TweetModel(uname, uid, request)
     db = TweetDB(tweet=t)
-    tid = db.posttweet()
+    tid = db.post_tweet()
     db.close()
     return responses.id_response(tid)
 
@@ -28,13 +28,13 @@ def additem(request):
 def item(request, id):
     db = TweetDB()
     if request.method == "DELETE":
-        delete_response = db.deletetweet(id)
+        delete_response = db.delete_tweet(id)
         db.close()
         if delete_response == True:
             return HttpResponse(status=200)
         return HttpResponse(status=400)
     # insert tweet on POST request
-    r = db.itemsearch(id)
+    r = db.retrieve_tweet(id)
     db.close()
     return responses.returnresp(r)
 
@@ -47,7 +47,7 @@ def like(request, id):
     uid = request.session.get("uid", "")
     db = TweetDB(like=lmodel)
     # likes or unlike a given tweet
-    db.liketweet(id, uid)
+    db.like_tweet(id, uid)
     return responses.ok_response()
 
 

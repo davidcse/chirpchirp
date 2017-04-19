@@ -11,7 +11,7 @@ def adduser(request):
     u = UserModel(request)
     db = TweetDB(user=u)
     # actually add user here
-    success = db.insertdisable()
+    success = db.insert_disable()
     db.close()
     if(success):
         return responses.ok_response()
@@ -25,7 +25,7 @@ def adduser(request):
 def verify(request):
     u = UserModel(request)
     db = TweetDB(user=u)
-    success = db.verifyuser()
+    success = db.verify_user()
     db.close()
     if success:
         return responses.ok_response()
@@ -40,11 +40,11 @@ def login(request):
     u = UserModel(request)
     db = TweetDB(user=u)
     # verify user and account details
-    if db.isverified() == False:
+    if db.is_verified() == False:
         db.close()
         return responses.err_response("Not Verified")
     # store cookie/session
-    request.session["uid"] = db.getuid()
+    request.session["uid"] = db.get_uid()
     request.session["uname"] = u.username
     db.close()
     return responses.redirect_ok_response("/homepage")

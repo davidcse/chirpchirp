@@ -27,7 +27,7 @@ class TweetDB:
         self.likesDB = self.db.likes
 
     # insert disabled user
-    def insertdisable(self):
+    def insert_disable(self):
         u = self.user
         try:
             self.userDB.insert({
@@ -41,7 +41,7 @@ class TweetDB:
             return False
 
     # verify user
-    def verifyuser(self):
+    def verify_user(self):
         # assume key matched abracadabra
         u = self.user
         result = self.userDB.update_one({"email": u.email}, {"$set": {"verified": True}}, upsert=False)
@@ -50,18 +50,18 @@ class TweetDB:
         return result.modified_count == 1 #v != None
 
     #
-    def isverified(self):
+    def is_verified(self):
         u = self.user
         return self.userDB.find({"username": u.username, "password": u.password, "verified": True}).count() > 0
 
     #
-    def getuid(self):
+    def get_uid(self):
         u = self.user
         doc = self.userDB.find_one({"username": u.username, "password": u.password})
         return str(doc["_id"])
 
     # post a tweet
-    def posttweet(self):
+    def post_tweet(self):
         t = self.tweet
         tweetDocument = {
             "uid": t.uid,
@@ -78,7 +78,7 @@ class TweetDB:
         return str(self.tweetsDB.insert(tweetDocument))
 
     # increase number of tweets by one
-    def liketweet(self, tid, uid):
+    def like_tweet(self, tid, uid):
         lmodel = self.like
         like_document = self.likesDB.find_one({"uid": uid, "tid": tid})
         if like_document != None:
@@ -93,39 +93,44 @@ class TweetDB:
         self.tweetsDB.update({'_id': ObjectId(tid)}, {'$inc': {'likes': amount}})
 
     # individual tweet search
-    def itemsearch(self, id):
+    def retrieve_tweet(self, id):
         t = self.tweetsDB.find_one({"_id": ObjectId(id)})
         if t is None:
             return {
                 "status": "error",
                 "error": "Id does not exist"
             }
-        return {
+
+        tweet_response = {
             "status": "OK",
             "item": {
-                "id": str(t["_id"]),
-                "username": t["username"],
-                "content": t["content"],
-                "timestamp": t["tweetstamp"],
-                "media": t.get("media", [])
+            "id": str(t["_id"]),
+            "username": t["username"],
+            "content": t["content"],
+            "timestamp": t["tweetstamp"],
+            "media": t.get("media", [])
             }
         }
+        if t.get("parent", None) != None:
+            tweet_response["item"]["parent"] = t["parent"]
+        return tweet_response
+
 
     # deletes tweet associated with id
     # returns True if able to delte completely, False ow
-    def deletetweet(self, id):
-        tweetdoc = self.tweetsDB.find_one({"_id": ObjectId(id)})
-        if tweetdoc == None:
+    def delete_tweet(self, id):
+        tweet_doc = self.tweetsDB.find_one({"_id": ObjectId(id)})
+        if tweet_doc == None:
             return False
         # delete tweet
         self.tweetsDB.delete_one({"_id": ObjectId(id)})
         # retrieve media array (if necessary)
-        mediaArray = tweetdoc.get("media", None)
-        if mediaArray == None:
+        media_array = tweet_doc.get("media", None)
+        if media_array == None:
             self.tweetsDB.delete_one({"_id": ObjectId(id)})
         else:
             # remove all media associated with tweet
-            for media in mediaArray:
+            for media in media_array:
                 self.mediaDB.delete_one({"_id": ObjectId(media)})
         return True
 

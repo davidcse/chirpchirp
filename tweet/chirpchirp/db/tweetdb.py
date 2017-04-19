@@ -61,9 +61,10 @@ class TweetDB:
         return str(doc["_id"])
 
     # post a tweet
+    # @TODO worry about retweet
     def post_tweet(self):
         t = self.tweet
-        tweetDocument = {
+        tweet_document = {
             "uid": t.uid,
             "username": t.uname,
             "content": t.content,
@@ -71,13 +72,14 @@ class TweetDB:
             "likes": 0,
             "retweets": 0
         }
-        if(t.parent != None):
-            tweetDocument["parent"] = t.parent
-        if(t.media != None):
-            tweetDocument["media"] = t.media
-        return str(self.tweetsDB.insert(tweetDocument))
+        if (t.parent != None):
+            tweet_document["parent"] = t.parent
+        if (t.media != None):
+            tweet_document["media"] = t.media
+        # if i have parent tweets i should...
+        return str(self.tweetsDB.insert(tweet_document))
 
-    # increase number of tweets by one
+    # increase number of tweet likes by one
     def like_tweet(self, tid, uid):
         lmodel = self.like
         like_document = self.likesDB.find_one({"uid": uid, "tid": tid})

@@ -44,10 +44,10 @@ def like(request, id):
     # get current model
     lmodel = LikeModel(request)
     # get current user
-    # uid = request.session.get("uid", "")
+    uid = request.session.get("uid", "")
     db = TweetDB(like=lmodel)
     # likes or unlike a given tweet
-    db.like_tweet(id)
+    db.like_tweet(id, uid)
     return responses.ok_response()
 
 

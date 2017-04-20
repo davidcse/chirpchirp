@@ -2,7 +2,6 @@ from django.conf.urls import url
 from controllers import user
 from controllers import tweet
 from controllers import views
-from controllers import testendpoint
 from controllers import follow
 from controllers import media
 

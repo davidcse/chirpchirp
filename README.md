@@ -29,3 +29,4 @@ appserver4 ip: {192.168.1.53}
 
 
 @TODO shouldnt return media array on /item if no media loaded in the first place
+sudo killall uwsgi

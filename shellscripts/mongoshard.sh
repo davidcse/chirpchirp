@@ -8,7 +8,7 @@ host_ip=$1
 host_port=$2
 seperator="---------------------"
 sleep_limit=5
-mongoshard_js=""
+mongoshard_js="https://raw.githubusercontent.com/elvis-alexander/chirpchirp/master/shellscripts/js/mongoshard.js"
 
 # installing mongodb
 echo $seperator "Installing MongoDB" $seperator

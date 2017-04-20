@@ -9,7 +9,7 @@ host_ip=$1
 # 27030
 host_port=$2
 sleep_limit=5
-mongoconf_js=""
+mongoconf_js="https://raw.githubusercontent.com/elvis-alexander/chirpchirp/master/shellscripts/js/mongoconf.js"
 
 # installing mongodb
 echo $seperator "Installing MongoDB" $seperator

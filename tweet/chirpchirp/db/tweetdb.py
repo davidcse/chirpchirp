@@ -30,7 +30,7 @@ class TweetDB:
     def insert_disable(self):
         u = self.user
         try:
-            self.userDB.insert({
+            f = self.userDB.insert({
                 "username": u.username,
                 "email": u.email,
                 "password": u.password,
@@ -154,7 +154,6 @@ class TweetDB:
         }
         # filter by username
         if searchmodel.username != None:
-            print 'filtering by username: ', searchmodel.username
             for word in searchmodel.q:
                 if word != ".*":
                     word = r"\b{}\b".format(word)
@@ -174,7 +173,6 @@ class TweetDB:
             return results
         # filter by users that the logged in user is following
         if searchmodel.following == True:
-            print "tweetdb(125) search is for followed users"
             # get users logged in user is following
             following_users = self.followsDB.find({"follower_username": loggedin_username}).limit(searchmodel.limit)
             for user in following_users:
@@ -242,7 +240,6 @@ class TweetDB:
         follow_model = self.follow
         status = True
         if follow_model.follow == True:
-            print curr_uname, 'following', follow_model.username
             # insert into database, without duplicates.
             upsert_record = {
                 "username": follow_model.username,
@@ -250,7 +247,6 @@ class TweetDB:
             }
             self.followsDB.update_one(upsert_record,{'$set':upsert_record},upsert=True)
         elif follow_model.follow == False:
-            print curr_uname, 'unfollowing', follow_model.username
             # delete record representing a follow relationship
             self.followsDB.delete_one({
                 "username": follow_model.username,
@@ -285,7 +281,6 @@ class TweetDB:
     # Gets user profile information
     def retrieve_user(self, username):
         doc = self.userDB.find_one({"username": username})
-        print "tweetdb(166)", "retrieved user:", str(doc)
         if(doc==None):
             return None
         following_count = self.followsDB.find({"follower_username": username}).count()

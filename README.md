@@ -31,3 +31,7 @@ sudo killall uwsgi
 
 @TODO shouldnt return media array on /item if no media loaded in the first place
 
+
+<!---->
+Things to question:<br>
+If i delete a retweet should the number of retweets for that tweet go down by one

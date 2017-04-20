@@ -31,6 +31,9 @@ sudo apt-get install python2.7-dev
 echo $seperator "Installing python-pip" $seperator
 sleep 2
 sudo apt-get install python-pip
+echo $seperator "Installing django" $seperator
+sudo pip install django
+echo $seperator "Installing pymongo" $seperator
 
 # activate virtualenv
 echo $seperator "Activating virtual-env" $seperator
@@ -40,9 +43,6 @@ source bin/activate
 echo $seperator "Moving to /chirpchirp/tweet dir" $seperator
 sleep 2
 cd tweet
-echo $seperator "Collecting static" $seperator
-sleep 2
-python manage.py collectstatic
 
 echo $seperator "Installing uwsgi" $seperator
 sleep 2
@@ -56,6 +56,11 @@ sudo pip install pymongo
 echo $seperator "Installing memcached" $seperator
 sleep 2
 sudo pip install python-memcached
+
+echo $seperator "Collecting static" $seperator
+sleep 2
+python manage.py collectstatic
+
 
 # install nginx
 echo $seperator "Updating apt-get" $seperator

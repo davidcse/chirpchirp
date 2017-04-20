@@ -1,4 +1,4 @@
-use tweet
+use tweet;
 sh.addShard("shard1_ip:shard1_port");
 sh.addShard("shard2_ip:shard2_port");
 sh.addShard("shard3_ip:shard3_port");

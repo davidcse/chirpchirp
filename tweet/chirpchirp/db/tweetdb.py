@@ -80,7 +80,7 @@ class TweetDB:
         return str(self.tweetsDB.insert(tweet_document))
 
     # increase number of tweet likes by one
-    def like_tweet(self, tid, uid):
+    def like_tweet(self, tid):
         lmodel = self.like
         # this code has bugs on update (fix later)
         # like_document = self.likesDB.find_one({"uid": uid, "tid": tid})

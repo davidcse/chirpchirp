@@ -17,8 +17,8 @@ class TweetDB:
         self.follow = follow
         self.like = like
         # connect to mongo
-        self.client = MongoClient('127.0.0.1', 27017)
-        # self.client = MongoClient('192.168.1.32', 27017)
+        # self.client = MongoClient('127.0.0.1', 27017)
+        self.client = MongoClient('130.245.169.41', 27017)
         self.db = self.client.tweet
         self.userDB = self.db.user
         self.tweetsDB = self.db.tweets

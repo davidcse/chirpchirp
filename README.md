@@ -23,4 +23,4 @@ appserver1
 appserver2
 appserver3
 appserver4
-loadbalancer(mongos, memcached)
+loadbalancer(mongos, memcached: {130.245.169.41:11211})

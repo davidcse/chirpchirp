@@ -9,7 +9,7 @@ sh.shardCollection("tweet.user", {"email": 1});
 sh.shardCollection("tweet.tweets", {"username": 1})
 sh.shardCollection("tweet.follows", {"follower_username": 1}); // potential problem b/c of query on username
 sh.shardCollection("tweet.media", {"_id": 1})
-sh.shardCollection("tweet.likes", {"uid": 1}) // problems!!!
+sh.shardCollection("tweet.likes", {"uid": 1, "tid": 1}) // problems!!!
 sh.status();
 
 
@@ -24,8 +24,8 @@ sh.shardCollection("tweet.user", {"email": 1});
 sh.shardCollection("tweet.tweets", {"username": 1});
 // potential problem b/c of query on username
 sh.shardCollection("tweet.follows", {"follower_username": 1});
-sh.shardCollection("tweet.media", {"_id": 1})
-sh.shardCollection("tweet.likes", {"uid": 1})
+sh.shardCollection("tweet.media", {"_id": 1});
+sh.shardCollection("tweet.likes", {"uid": 1, "tid": 1}); // problems!!!
 sh.status();
 
 */

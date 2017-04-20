@@ -82,13 +82,14 @@ class TweetDB:
     # increase number of tweet likes by one
     def like_tweet(self, tid, uid):
         lmodel = self.like
+        # this code has bugs on update (fix later)
         like_document = self.likesDB.find_one({"uid": uid, "tid": tid})
         if like_document != None:
             if like_document["liked"] == "true" and lmodel.like == True:
                     return
             elif like_document["liked"] == "false" and lmodel.like == False:
                     return
-            self.likesDB.update({"uid": uid, "tid": tid}, {"liked": "true" if lmodel.like == True else "false"})
+            self.likesDB.update_one({"uid": uid, "tid": tid}, {"liked": "true" if lmodel.like == True else "false"})
         else:
             self.likesDB.insert({"uid": uid, "tid": tid, "liked": "true" if lmodel.like == True else "false"})
         amount = 1 if lmodel.like == True else -1

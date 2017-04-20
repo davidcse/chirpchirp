@@ -27,7 +27,7 @@ appserver2 ip: {192.168.1.51}
 appserver3 ip: {192.168.1.52}
 appserver4 ip: {192.168.1.53}
 
+sudo killall uwsgi
 
 @TODO shouldnt return media array on /item if no media loaded in the first place
-sudo killall uwsgi
 

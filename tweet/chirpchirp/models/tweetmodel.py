@@ -21,7 +21,12 @@ class TweetModel:
         params = json.loads(body)
         self.uname = uname
         self.uid = uid
+        self.is_retweet = False
         self.content = params.get("content")
+        prefix = "RT "
+        if self.content.startswith(prefix):
+            self.content = self.content[len(prefix):]
+            self.is_retweet = True
         self.parent = params.get('parent',None)
         self.media = params.get("media",None)
         # if media is stringified list, i.e. "[]", convert to actual list [].

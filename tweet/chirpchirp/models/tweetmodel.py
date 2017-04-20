@@ -25,7 +25,6 @@ class TweetModel:
         self.content = params.get("content")
         prefix = "RT "
         if self.content.startswith(prefix):
-            self.content = self.content[len(prefix):]
             self.is_retweet = True
         self.parent = params.get('parent',None)
         self.media = params.get("media",None)

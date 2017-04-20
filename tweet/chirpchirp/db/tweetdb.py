@@ -61,9 +61,17 @@ class TweetDB:
         return str(doc["_id"])
 
     # post a tweet
-    # @TODO worry about retweet
     def post_tweet(self):
         t = self.tweet
+        if t.is_retweet == True:
+            prefix = "RT "
+            # increase number of
+            retweet_content = t.content[len(prefix):]
+            retweet = self.tweetsDB.find_one({"content": retweet_content})
+            if retweet == None:
+                return None
+            self.tweetsDB.update_one({"content": retweet_content}, {"$inc": {"retweets": 1}})
+        # insert new tweet
         tweet_document = {
             "uid": t.uid,
             "username": t.uname,
@@ -72,11 +80,11 @@ class TweetDB:
             "likes": 0,
             "retweets": 0
         }
-        if (t.parent != None):
+        # set parent and media if necessary
+        if t.parent != None:
             tweet_document["parent"] = t.parent
-        if (t.media != None):
+        if t.media != None:
             tweet_document["media"] = t.media
-        # if i have parent tweets i should...
         return str(self.tweetsDB.insert(tweet_document))
 
     def like_tweet(self, tid, uid):

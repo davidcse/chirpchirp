@@ -90,7 +90,8 @@ class TweetDB:
         #     elif like_document["liked"] == "false" and lmodel.like == False:
         #             return
         #     self.likesDB.update_one({"uid": uid, "tid": tid}, {"liked": "true" if lmodel.like == True else "false"})
-        # else:
+        #     self.likesDB.update_one({"uid": uid, "tid": tid}, {"$set": {"liked": "true" if lmodel.like == True else "false"}})
+        #  else:
         #     self.likesDB.insert({"uid": uid, "tid": tid, "liked": "true" if lmodel.like == True else "false"})
         amount = 1 if lmodel.like == True else -1
         self.tweetsDB.update({'_id': ObjectId(tid)}, {'$inc': {'likes': amount}})

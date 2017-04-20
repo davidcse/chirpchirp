@@ -1,3 +1,4 @@
+//verifying this is committed
 use tweet;
 sh.addShard("shard1_ip:shard1_port");
 sh.addShard("shard2_ip:shard2_port");

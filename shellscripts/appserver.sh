@@ -78,7 +78,7 @@ sudo apt-get install nginx
 # confingure nginx
 echo $seperator "Launching uwsgi" $seperator
 sleep 2
-sed -ie 's/host_ip/'$shard1_ip'/g' /home/ubuntu/chirpchirp/nginxconfig/chirp_nginx.conf
+sed -ie 's/host_ip/'$host_ip'/g' /home/ubuntu/chirpchirp/nginxconfig/chirp_nginx.conf
 
 
 echo $seperator "Launching uwsgi" $seperator

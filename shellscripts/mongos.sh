@@ -1,23 +1,24 @@
 #!/usr/bin/env bash
 
 # chmod +x mongos.sh
-# USAGE: ./mongos.sh {shard1_ip} {shard1_port} {shard2_ip} {shard2_port} {shard3_ip} {shard3_port} {shard4_ip} {shard4_port}
+# USAGE: ./mongos.sh {host_ip} {config_ip} {config_port} {shard1_ip} {27040} {shard2_ip} {shard2_port} {shard3_ip} {shard3_port} {shard4_ip} {shard4_port}
+# USAGE: sudo ./mongos.sh 192.168.1.54 192.168.1.49 27030 192.168.1.45 27040 192.168.1.46 27040 192.168.1.47 27040 192.168.1.48 27040
 
 # script variables
 seperator="---------------------"
-host_ip=$1
-config_ip=$2
-config_port=$3
+host_ip=${1}
+config_ip=${2}
+config_port=${3}
+shard1_ip=${4}
+shard1_port=${5}
+shard2_ip=${6}
+shard2_port=${7}
+shard3_ip=${8}
+shard3_port=${9}
+shard4_ip=${10}
+shard4_port=${11}
 sleep_limit=5
 mongos_js="https://raw.githubusercontent.com/elvis-alexander/chirpchirp/master/shellscripts/js/mongos.js"
-shard1_ip=$1
-shard1_port=$2
-shard2_ip=$3
-shard2_port=$4
-shard3_ip=$5
-shard3_port=$6
-shard4_ip=$7
-shard4_port=$8
 
 # installing mongodb
 echo $seperator "Installing MongoDB" $seperator
@@ -32,12 +33,14 @@ echo $seperator "Creating config directories" $seperator
 sleep $sleep_limit
 mkdir mongo
 mkdir mongo/mongo_logs
+chmod -R 777 mongo
+chmod -R 777 mongo/mongo_logs
 
 # configuring mongos
 echo $seperator "Running Mongos" $seperator
 sleep $sleep_limit
-mongos --configdb conf/$config_ip:$config_port --bind_ip $host_ip --port 27017 --logpath /home/ubuntu/mongo/mongo_logs/mongos.log --logappend --fork
-#mongos --configdb conf/192.168.1.39:27030 --bind_ip 192.168.1.32 --port 27017 --logpath /home/ubuntu/mongo/mongo_logs/mongos.log --logappend --fork
+sudo mongos --configdb conf/$config_ip:$config_port --bind_ip $host_ip --port 27017 --logpath /home/ubuntu/mongo/mongo_logs/mongos.log --logappend --fork
+#mongos --configdb conf/192.168.1.49:27030 --bind_ip 130.245.169.41 --port 27017 --logpath /home/ubuntu/mongo/mongo_logs/mongos.log --logappend --fork
 
 # retrieving js file
 echo $seperator "Wget js file" $seperator
@@ -59,7 +62,7 @@ sed -ie 's/shard4_port/'$shard4_port'/g' mongos.js
 # connect mongo client
 echo $seperator "Feeding js input" $seperator
 sleep $sleep_limit
-mongo --host $host_ip --port 27017 < mongos.js
+sudo mongo --host $host_ip --port 27017 < mongos.js
 sleep 20
 
 # mongo ps results

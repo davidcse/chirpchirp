@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
 # chmod +x mongoshard.sh
-# USAGE: ./mongoshard.sh
+# USAGE: ./mongoshard.sh {host_ip} {host_port}
+# ./mongoshard.sh 192.168.1.45 27040
+# ./mongoshard.sh 192.168.1.46 27040
+# ./mongoshard.sh 192.168.1.47 27040
+# ./mongoshard.sh 192.168.1.48 27040
+
 
 # script variables
 host_ip=$1
@@ -39,4 +44,10 @@ wget $mongoshard_js
 # feeding js input
 echo $seperator "Feeding js input" $seperator
 sleep $sleep_limit
-mongo --host 192.168.1.37 --port 27018 < mongshard.js
+mongo --host $host_ip --port $host_port < mongoshard.js
+sleep 20
+
+# mongo ps results
+echo $seperator "ps results" $seperator
+sleep $sleep_limit
+ps -ax | grep mongo

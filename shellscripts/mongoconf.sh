@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-# chmod +x mongos.sh
+# chmod +x mongoconf.sh
 # USAGE: ./mongoconf.sh {host_ip} {host_port}
+# ./mongoconf.sh 192.168.1.49 27030
 
 # script variables
 seperator="---------------------"
@@ -24,6 +25,7 @@ echo $seperator "Creating config directories" $seperator
 sleep $sleep_limit
 mkdir mongo
 mkdir mongo/mongo_logs
+mkdir mongo/config
 mkdir mongo/config/conf
 
 # running mongo config server

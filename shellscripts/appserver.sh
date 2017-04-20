@@ -2,12 +2,17 @@
 
 # please add this in order to grant execution privlidges
 # chmod +x appserver.sh
+# USAGE {host_ip}
 
 # script to set up an app server, will be responsible for downloading project, running uwsgi and nginx
+
+# @TODO implement an argument for ip_address
 
 # script variables
 project_repo="https://github.com/elvis-alexander/chirpchirp"
 seperator="---------------------"
+host_ip=$1
+
 
 # install git
 echo $seperator "Update apt-get" $seperator
@@ -71,6 +76,11 @@ sleep 2
 sudo apt-get install nginx
 
 # confingure nginx
+echo $seperator "Launching uwsgi" $seperator
+sleep 2
+sed -ie 's/host_ip/'$shard1_ip'/g' /home/ubuntu/chirpchirp/nginxconfig/chirp_nginx.conf
+
+
 echo $seperator "Launching uwsgi" $seperator
 sleep 2
 #sudo uwsgi --socket /home/ubuntu/chirp.sock --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 10 --threads 2 --chmod-socket=666 --logto /home/ubuntu/uwsgi.log --daemonize /home/ubuntu/daemonize.log

@@ -30,5 +30,5 @@ class TweetModel:
         self.parent = params.get('parent',None)
         self.media = params.get("media",None)
         # if media is stringified list, i.e. "[]", convert to actual list [].
-        if isinstance(self.media,str):
-            self.media = destring_to_intlist(self.media)
+        # if isinstance(self.media,str):
+        #     self.media = destring_to_intlist(self.media)

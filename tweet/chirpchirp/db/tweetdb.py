@@ -68,6 +68,7 @@ class TweetDB:
             print 'content', t.content[len(prefix)]
             retweet_content = t.content[len(prefix):]
             retweet = self.tweetsDB.find_one({"content": retweet_content})
+            print '=> retweet', retweet
             if retweet == None:
                 return None
             self.tweetsDB.update_one({"content": retweet_content}, {"$inc": {"retweets": 1}})

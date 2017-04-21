@@ -31,3 +31,4 @@ class TweetModel:
         # if media is stringified list, i.e. "[]", convert to actual list [].
         if isinstance(self.media,str):
             self.media = destring_to_intlist(self.media)
+        print '=>', self.content

@@ -117,10 +117,10 @@ def search_following(loggedin_username, followsDB, tweetsDB, searchmodel, result
                 "tweetstamp": {"$lte": searchmodel.tweetstamp}
             }
             modify_searchconfig_parentfield(searchConfig,searchmodel)
-            tweets = tweetsDB.find(searchConfig)#.limit(searchmodel.limit)
+            tweets = tweetsDB.find(searchConfig).limit(searchmodel.limit)
             results = fill_result_items(tweets,results, searchmodel.limit, searchmodel.replies)
-            # if len(results) >= searchmodel.limit:
-            #     break
+            if len(results) >= searchmodel.limit:
+                break
     ranked_results = rank_result_tweets(results, is_rankfield_interest(searchmodel))
     return {
         "status": "OK",
@@ -139,10 +139,10 @@ def search_not_following(tweetsDB, searchmodel, results):
             "tweetstamp": {"$lte": searchmodel.tweetstamp}
         }
         modify_searchconfig_parentfield(searchConfig,searchmodel)
-        tweets = tweetsDB.find(searchConfig)#.limit(searchmodel.limit)
+        tweets = tweetsDB.find(searchConfig).limit(searchmodel.limit)
         results = fill_result_items(tweets,results, searchmodel.limit, searchmodel.replies)
-        # if len(results) >= searchmodel.limit:
-        #     break
+        if len(results) >= searchmodel.limit:
+            break
     ranked_results = rank_result_tweets(results, is_rankfield_interest(searchmodel))
     return {
         "status": "OK",
@@ -160,10 +160,10 @@ def search_username(tweetsDB, searchmodel, results):
             "tweetstamp": {"$lte": searchmodel.tweetstamp}
         }
         modify_searchconfig_parentfield(searchConfig,searchmodel)
-        tweets = tweetsDB.find(searchConfig)#.limit(searchmodel.limit)
+        tweets = tweetsDB.find(searchConfig).limit(searchmodel.limit)
         results = fill_result_items(tweets,results, searchmodel.limit, searchmodel.replies)
-        # if len(results) >= searchmodel.limit:
-        #     break
+        if len(results) >= searchmodel.limit:
+            break
     ranked_results = rank_result_tweets(results, is_rankfield_interest(searchmodel))
     return {
         "status": "OK",

@@ -4,7 +4,7 @@ from .. db.tweetdb import TweetDB
 from django.http import HttpResponse
 
 @csrf_exempt
-def add_media(request):
+def addmedia(request):
     f = request.FILES['content']
     db = TweetDB()
     mid = db.save_media(f)

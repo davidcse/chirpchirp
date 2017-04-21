@@ -36,13 +36,3 @@ sudo killall uwsgi
 Things to question:<br>
 If i delete a retweet should the number of retweets for that tweet go down by one
 
-
-=> msg_one (4 likes)
-
-=> msg_two (3 likes)
-
-=> msg_three (2 likes)
-
-=> msg_four (1 likes)
-
-=>

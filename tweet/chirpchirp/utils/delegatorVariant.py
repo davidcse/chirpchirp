@@ -4,14 +4,17 @@
 import time
 
 
+
 #############################
 #   SEARCH : RANKING
 #############################
+
 # checks what ranking algorithm to use based on the search model.
 def is_rankfield_interest(searchmodel):
     if(searchmodel.rank.lower().strip() == "time"):
         return False
     return True
+
 
 
 # comparator algorithm that computes rank score based on time
@@ -23,6 +26,7 @@ def rank_time_compare(tweet_1, tweet_2):
     return False
 
 
+
 # comparator algorithm that computes rank score based on time
 def rank_interest_compare(tweet_1, tweet_2):
     rank_score_t1 = rank_algorithm_interest(tweet_1.get("tweetstamp"), tweet_1.get("likes"), tweet_1.get("retweets"))
@@ -30,6 +34,7 @@ def rank_interest_compare(tweet_1, tweet_2):
     if(rank_score_t1 < rank_score_t2):
         return True
     return False
+
 
 
 # constructs a comparison function, by choosing which comparator algorithm function to use
@@ -42,6 +47,8 @@ def make_comparator(rank_comparator):
         else:
             return 0
     return compare
+
+
 
 
 # ranks all the tweets in the filtered list by priority algorithm
@@ -87,9 +94,11 @@ def rank_algorithm_interest(time_posted, likecount,retweetcount):
     return likescore + retweetscore + timescore
 
 
+
 #############################
 #   HELPER
 #############################
+
 # inserts the tweet into the results without repetition
 def insert_tweet_nonrepeat(tweet,results):
     if tweet["content"] not in results["items"]:
@@ -101,10 +110,14 @@ def insert_tweet_nonrepeat(tweet,results):
     })
 
 
+
+
 # fills the search results tweet into the results' item field (array).
 # breaks early if beyond the search limit or if tweets are repeated.
 def fill_result_items(filtered_tweets, results,searchlimit):
     for tweet in filtered_tweets:
+        if len(results["items"]) >= searchlimit:
+            return results
         insert_tweet_nonrepeat(tweet,results)
     return results
 
@@ -115,23 +128,22 @@ def fill_result_items(filtered_tweets, results,searchlimit):
 
 # safechecks for parent field in search model, appends to config if found.
 def modify_searchconfig_parentfield(searchConfig,searchmodel):
-    if(searchmodel.parent != None):
+    if(searchmodel.parent):
         searchConfig["parent"] = searchmodel.parent
     # exclude tweets that are replies
-    # i will exclude this for now...
-    # if(not searchmodel.replies):
-    #     searchConfig["parent"] = None
+    if(not searchmodel.replies):
+        searchConfig["parent"] = None
+
 
 
 ####################################################
-#   SEARCH : MAIN CONTROL FLOWS BATCHE QUERIES, THIS CONTROL FLOW IS REALLY GOOD, GREAT JOB!
+#   SEARCH : MAIN CONTROL FLOWS BATCHE QUERIES
 ####################################################
-
 
 # search only the tweets of the users that this current user is following.
 def search_following(loggedin_username, followsDB, tweetsDB, searchmodel, results):
     # get users logged in user is following
-    following_users = followsDB.find({"follower_username": loggedin_username})
+    following_users = followsDB.find({"follower_username": loggedin_username}).limit(searchmodel.limit)
     for user in following_users:
         # if query string is specified fix hereeeee
         for word in searchmodel.q:
@@ -143,9 +155,12 @@ def search_following(loggedin_username, followsDB, tweetsDB, searchmodel, result
                 "tweetstamp": {"$lte": searchmodel.tweetstamp}
             }
             modify_searchconfig_parentfield(searchConfig,searchmodel)
-            tweets = tweetsDB.find(searchConfig)
+            tweets = tweetsDB.find(searchConfig).limit(searchmodel.limit)
             results =  fill_result_items(tweets,results, searchmodel.limit)
-    return rank_result_tweets(results, is_rankfield_interest(searchmodel))
+            return rank_result_tweets(results, is_rankfield_interest(searchmodel))
+
+
+
 
 
 # don't filter by users that user is following
@@ -159,13 +174,16 @@ def search_not_following(tweetsDB, searchmodel,results):
             "tweetstamp": {"$lte": searchmodel.tweetstamp}
         }
         modify_searchconfig_parentfield(searchConfig,searchmodel)
-        tweets = tweetsDB.find(searchConfig)
+        tweets = tweetsDB.find(searchConfig).limit(searchmodel.limit)
         results = fill_result_items(tweets,results, searchmodel.limit)
-    return rank_result_tweets(results, is_rankfield_interest(searchmodel))
+        return rank_result_tweets(results, is_rankfield_interest(searchmodel))
+
+
 
 
 # search only the tweets posted by a specific user of interest.
 def search_username(tweetsDB, searchmodel,results):
+    print 'filtering by username: ', searchmodel.username
     for word in searchmodel.q:
         if word != ".*":
             word = r"\b{}\b".format(word)
@@ -175,6 +193,6 @@ def search_username(tweetsDB, searchmodel,results):
             "tweetstamp": {"$lte": searchmodel.tweetstamp}
         }
         modify_searchconfig_parentfield(searchConfig,searchmodel)
-        tweets = tweetsDB.find(searchConfig)
-        results = fill_result_items(tweets,results, searchmodel.limit)
-    return rank_result_tweets(results, is_rankfield_interest(searchmodel))
+        filtered_tweets = tweetsDB.find(searchConfig).limit(searchmodel.limit)
+        results = fill_result_items(filtered_tweets,results, searchmodel.limit)
+        return rank_result_tweets(results, is_rankfield_interest(searchmodel))

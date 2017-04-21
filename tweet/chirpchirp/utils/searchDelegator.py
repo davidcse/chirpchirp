@@ -2,7 +2,7 @@
 #   DELEGATOR THAT PERFORMS THE DETAILS OF THE SEARCH PROCESS
 ################################################################
 import time
-
+import pprint
 
 #############################
 #   SEARCH : RANKING
@@ -16,18 +16,17 @@ def is_rankfield_interest(searchmodel):
 
 # comparator algorithm that computes rank score based on time
 def rank_time_compare(tweet_1, tweet_2):
-    rank_score_t1 = rank_algorithm_time(tweet_1.get("tweetstamp"), tweet_1.get("likes"), tweet_1.get("retweets"))
-    rank_score_t2 = rank_algorithm_time(tweet_2.get("tweetstamp"), tweet_2.get("likes"), tweet_2.get("retweets"))
-    if(rank_score_t1 < rank_score_t2):
+    tweet_1_score = tweet_1["timestamp"]
+    tweet_2_score = tweet_2["timestamp"]
+    if tweet_1_score < tweet_2_score:
         return True
     return False
 
-
 # comparator algorithm that computes rank score based on time
 def rank_interest_compare(tweet_1, tweet_2):
-    rank_score_t1 = rank_algorithm_interest(tweet_1.get("tweetstamp"), tweet_1.get("likes"), tweet_1.get("retweets"))
-    rank_score_t2 = rank_algorithm_interest(tweet_2.get("tweetstamp"), tweet_2.get("likes"), tweet_2.get("retweets"))
-    if(rank_score_t1 < rank_score_t2):
+    tweet_1_score = tweet_1["likes"] + tweet_2["retweets"]
+    tweet_2_score = tweet_2["likes"] + tweet_2["retweets"]
+    if tweet_1_score < tweet_2_score:
         return True
     return False
 
@@ -46,45 +45,10 @@ def make_comparator(rank_comparator):
 
 # ranks all the tweets in the filtered list by priority algorithm
 def rank_result_tweets(filtered_tweets, isInterest):
+    filtered_tweets = filtered_tweets["items"]
     if isInterest == True:
         return sorted(filtered_tweets, cmp=make_comparator(rank_interest_compare), reverse=True)
     return sorted(filtered_tweets, cmp=make_comparator(rank_time_compare), reverse=True)
-
-
-
-
-# given the time that tweet was posted, likes for tweet, and retweet count, calculate a score favoring time.
-def rank_algorithm_time(time_posted, likecount,retweetcount):
-    elapsed_sec = time.time() - time_posted
-    # decay factor
-    decayfactor_time = ((9.8/10.0)** (elapsed_sec/60)) # Retains 98% of previous iteration's value every 60 seconds.
-    decayfactor_like = ((7.5/10.0)** (elapsed_sec/60)) # Retains 75% of previous iteration's value every 60 seconds.
-    decayfactor_retweet = ((7.5/10.0)** (elapsed_sec/60)) # Retains 75% of previous iteration's value every 60 seconds.
-    # calculated scores
-    likescore = 500 * likecount * decayfactor_like
-    retweetscore= 500 * retweetcount * decayfactor_retweet
-    # add-one smoothing for recency. +1 for the current second, +0.5 after 2 second. + 0.33 after 3 seconds.
-    time_priority_factor = 1.0/elapsed_sec
-    timescore =  (3000 * decayfactor_time) + time_priority_factor
-    # print "likescore", likescore, "retweetscore", retweetscore,"timescore", timescore
-    return likescore + retweetscore + timescore
-
-
-# given the time that tweet was posted, likes for tweet, and retweet count, calculate a score favoring likes and retweets.
-def rank_algorithm_interest(time_posted, likecount,retweetcount):
-    elapsed_sec = time.time() - time_posted
-    # decay factor
-    decayfactor_time = ((7.5/10.0)** (elapsed_sec/60)) # Retains 75% of previous iteration's value every 60 seconds.
-    decayfactor_like = ((9.8/10.0)** (elapsed_sec/60)) # Retains 98% of previous iteration's value every 60 seconds.
-    decayfactor_retweet = ((9.8/10.0)** (elapsed_sec/60)) # Retains 98% of previous iteration's value every 60 seconds.
-    # calculated scores
-    likescore = 1500 * likecount * decayfactor_like
-    retweetscore= 1500 * retweetcount * decayfactor_retweet
-    # add-one smoothing for recency. +1 for the current second, +0.5 after 2 second. + 0.33 after 3 seconds.
-    time_priority_factor = 1.0/elapsed_sec
-    timescore =  (1000 * decayfactor_time) + time_priority_factor
-    # print "likescore", likescore, "retweetscore", retweetscore,"timescore", timescore
-    return likescore + retweetscore + timescore
 
 
 #############################
@@ -97,7 +61,9 @@ def insert_tweet_nonrepeat(tweet,results):
         "id": str(tweet["_id"]),
         "username": tweet["username"],
         "content": tweet["content"],
-        "timestamp": tweet["tweetstamp"]
+        "timestamp": tweet["tweetstamp"],
+        "likes": tweet["likes"],
+        "retweets": tweet["retweets"]
     })
 
 
@@ -105,9 +71,9 @@ def insert_tweet_nonrepeat(tweet,results):
 # breaks early if beyond the search limit or if tweets are repeated.
 def fill_result_items(filtered_tweets, results, searchlimit, replies):
     for tweet in filtered_tweets:
-        if len(results["items"]) >= searchlimit:
-            return results
-        # exclude reply messages if needed
+        # if len(results["items"]) >= searchlimit:
+        #     return results
+        # exclude reply messages, if necessary
         is_reply = tweet.get("parent", None) != None
         if replies == False and is_reply == True:
             continue
@@ -187,7 +153,9 @@ def search_username(tweetsDB, searchmodel, results):
         modify_searchconfig_parentfield(searchConfig,searchmodel)
         tweets = tweetsDB.find(searchConfig)#.limit(searchmodel.limit)
         results = fill_result_items(tweets,results, searchmodel.limit, searchmodel.replies)
-        # this also may be a potential problem... what if the search should keep going...
         # if len(results) >= searchmodel.limit:
         #     break
-    return rank_result_tweets(results, is_rankfield_interest(searchmodel))
+    arr =  rank_result_tweets(results, is_rankfield_interest(searchmodel))
+    arr = arr[:searchmodel.limit]
+    pprint.pprint(arr, indent=4)
+    return {}

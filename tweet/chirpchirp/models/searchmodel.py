@@ -33,4 +33,4 @@ class SearchModel:
         # cast to boolean, by checking if string is "false." If so, it sets a boolean False.
         if(not isinstance(self.replies, bool)):
             self.replies = not (str(self.replies).strip().lower() == "false")
-        print '=>model:', self.tweetstamp, self.limit, self.q, self.username, self.following
+        # print '=>model:', self.tweetstamp, self.limit, self.q, self.username, self.following

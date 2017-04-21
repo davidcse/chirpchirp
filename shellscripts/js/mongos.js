@@ -22,6 +22,9 @@ sh.addShard("shard1/192.168.1.45:27040");
 sh.addShard("shard2/192.168.1.46:27040");
 sh.addShard("shard3/192.168.1.47:27040");
 sh.addShard("shard4/192.168.1.48:27040");
+sh.addShard("shard5/192.168.1.56:27040");
+sh.addShard("shard6/192.168.1.57:27040");
+
 sh.enableSharding("tweet");
 sh.shardCollection("tweet.user", {"email": 1});
 sh.shardCollection("tweet.tweets", {"username": 1});

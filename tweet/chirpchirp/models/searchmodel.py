@@ -26,7 +26,7 @@ class SearchModel:
         self.rank = params.get("rank", "interest")
         # get optional parent parameter, default to None
         try:
-            self.parent = int(params.get("parent"))
+            self.parent = params.get("parent")
         except:
             self.parent = None
         self.replies = params.get("replies",True)

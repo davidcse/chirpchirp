@@ -46,7 +46,7 @@ def make_comparator(rank_comparator):
 
 # ranks all the tweets in the filtered list by priority algorithm
 def rank_result_tweets(filtered_tweets, isInterest):
-    if(isInterest):
+    if isInterest == True:
         return sorted(filtered_tweets, cmp=make_comparator(rank_interest_compare), reverse=True)
     return sorted(filtered_tweets, cmp=make_comparator(rank_time_compare), reverse=True)
 
@@ -101,13 +101,16 @@ def insert_tweet_nonrepeat(tweet,results):
     })
 
 
-
 # fills the search results tweet into the results' item field (array).
 # breaks early if beyond the search limit or if tweets are repeated.
-def fill_result_items(filtered_tweets, results,searchlimit):
+def fill_result_items(filtered_tweets, results, searchlimit, replies):
     for tweet in filtered_tweets:
         if len(results["items"]) >= searchlimit:
             return results
+        # exclude reply messages if needed
+        is_reply = tweet.get("parent", None) != None
+        if replies == False and is_reply == True:
+            continue
         insert_tweet_nonrepeat(tweet,results)
     return results
 
@@ -146,10 +149,10 @@ def search_following(loggedin_username, followsDB, tweetsDB, searchmodel, result
                 "tweetstamp": {"$lte": searchmodel.tweetstamp}
             }
             modify_searchconfig_parentfield(searchConfig,searchmodel)
-            tweets = tweetsDB.find(searchConfig).limit(searchmodel.limit)
-            results = fill_result_items(tweets,results, searchmodel.limit)
-            if len(results) >= searchmodel.limit:
-                break
+            tweets = tweetsDB.find(searchConfig)#.limit(searchmodel.limit)
+            results = fill_result_items(tweets,results, searchmodel.limit, searchmodel.replies)
+            # if len(results) >= searchmodel.limit:
+            #     break
     return rank_result_tweets(results, is_rankfield_interest(searchmodel))
 
 
@@ -164,10 +167,10 @@ def search_not_following(tweetsDB, searchmodel, results):
             "tweetstamp": {"$lte": searchmodel.tweetstamp}
         }
         modify_searchconfig_parentfield(searchConfig,searchmodel)
-        tweets = tweetsDB.find(searchConfig).limit(searchmodel.limit)
-        results = fill_result_items(tweets,results, searchmodel.limit)
-        if len(results) >= searchmodel.limit:
-            break
+        tweets = tweetsDB.find(searchConfig)#.limit(searchmodel.limit)
+        results = fill_result_items(tweets,results, searchmodel.limit, searchmodel.replies)
+        # if len(results) >= searchmodel.limit:
+        #     break
     return rank_result_tweets(results, is_rankfield_interest(searchmodel))
 
 
@@ -182,10 +185,9 @@ def search_username(tweetsDB, searchmodel, results):
             "tweetstamp": {"$lte": searchmodel.tweetstamp}
         }
         modify_searchconfig_parentfield(searchConfig,searchmodel)
-        # this limit may be problematic (what if a higher rank exists in a tweet not in this limit!)
-        tweets = tweetsDB.find(searchConfig).limit(searchmodel.limit)
-        results = fill_result_items(tweets,results, searchmodel.limit)
+        tweets = tweetsDB.find(searchConfig)#.limit(searchmodel.limit)
+        results = fill_result_items(tweets,results, searchmodel.limit, searchmodel.replies)
         # this also may be a potential problem... what if the search should keep going...
-        if len(results) >= searchmodel.limit:
-            break
+        # if len(results) >= searchmodel.limit:
+        #     break
     return rank_result_tweets(results, is_rankfield_interest(searchmodel))

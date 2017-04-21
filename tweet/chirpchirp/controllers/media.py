@@ -16,8 +16,10 @@ def retrieve(request, id):
     db = TweetDB()
     content = db.get_media(id)
     db.close()
-    # if content == None:
-    #     return HttpResponse("Image does not exist")
+    if content == None:
+        r = HttpResponse("Image does not exist")
+        r["Content-Type"] = "application/json"
+        return r
     r = HttpResponse(content)
     r["Content-Type"] = "image/jpg"
     return r

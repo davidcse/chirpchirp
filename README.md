@@ -8,38 +8,31 @@ nginx(production)
 
 
 
-sudo nano /etc/nginx/sites-available/default<br>
-cat /var/log/nginx/error.log<br>
 
-upstream django_webservers {
-        server 130.245.168.162;
-        #server IP;
-}
-<br>
-server {
-        listen 80;
-        location / {
-                proxy_pass http://django_webservers;
-        }
-}
-<br>
 uname -n | sudo tee /usr/share/nginx/html/index.html
-<br>
 
-Using uwsgi,
-sudo python manage.py runserver 0.0.0.0:80
-sudo uwsgi --http :80 --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 4 --threads 1
+ps -ax | grep uwsgi<br>
+#####################################<br>
+loadbalancer ip: {130.245.169.41} {mongos: port: {27017}, memcached: port: {11211}}
 
-sudo python manage.py runserver 0.0.0.0:8000
-sudo uwsgi --http :8000 --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 1 --threads 1
+config ip: {192.168.1.49} port: {27030}
+
+shard1 ip: {192.168.1.45} port: {27040}
+shard2 ip: {192.168.1.46} port: {27040}
+shard3 ip: {192.168.1.47} port: {27040}
+shard4 ip: {192.168.1.48} port: {27040}
+
+appserver1 ip: {192.168.1.55}
+appserver2 ip: {192.168.1.51}
+appserver3 ip: {192.168.1.52}
+appserver4 ip: {192.168.1.53}
+
+sudo killall uwsgi
+
+@TODO shouldnt return media array on /item if no media loaded in the first place
 
 
-# MongoDB sharding
-user: {_id, username, password, verified, email}<br>
-tweets: {_id, username, content, uid, tweetstamp}<br>
-follows: {_id, username, follower_username}
+<!---->
+Things to question:<br>
+If i delete a retweet should the number of retweets for that tweet go down by one
 
-
-
-
-ps -ax | grep uwsgi

@@ -4,7 +4,7 @@ from .. db.tweetdb import TweetDB
 from django.http import HttpResponse
 
 @csrf_exempt
-def add_media(request):
+def addmedia(request):
     f = request.FILES['content']
     db = TweetDB()
     mid = db.save_media(f)
@@ -16,6 +16,10 @@ def retrieve(request, id):
     db = TweetDB()
     content = db.get_media(id)
     db.close()
+    if content == None:
+        r = HttpResponse("Image does not exist")
+        r["Content-Type"] = "application/json"
+        return r
     r = HttpResponse(content)
     r["Content-Type"] = "image/jpg"
     return r

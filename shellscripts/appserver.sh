@@ -2,12 +2,17 @@
 
 # please add this in order to grant execution privlidges
 # chmod +x appserver.sh
+# USAGE {host_ip}
 
 # script to set up an app server, will be responsible for downloading project, running uwsgi and nginx
+
+# @TODO implement an argument for ip_address
 
 # script variables
 project_repo="https://github.com/elvis-alexander/chirpchirp"
 seperator="---------------------"
+host_ip=$1
+
 
 # install git
 echo $seperator "Update apt-get" $seperator
@@ -31,18 +36,18 @@ sudo apt-get install python2.7-dev
 echo $seperator "Installing python-pip" $seperator
 sleep 2
 sudo apt-get install python-pip
+echo $seperator "Installing django" $seperator
+sudo pip install django
+echo $seperator "Installing pymongo" $seperator
 
 # activate virtualenv
-echo $seperator "Activate virtual-env" $seperator
+echo $seperator "Activating virtual-env" $seperator
 sleep 2
 cd chirpchirp
 source bin/activate
 echo $seperator "Moving to /chirpchirp/tweet dir" $seperator
 sleep 2
 cd tweet
-echo $seperator "Collecting static" $seperator
-sleep 2
-python manage.py collectstatic
 
 echo $seperator "Installing uwsgi" $seperator
 sleep 2
@@ -57,6 +62,11 @@ echo $seperator "Installing memcached" $seperator
 sleep 2
 sudo pip install python-memcached
 
+echo $seperator "Collecting static" $seperator
+sleep 2
+python manage.py collectstatic
+
+
 # install nginx
 echo $seperator "Updating apt-get" $seperator
 sleep 2
@@ -68,8 +78,14 @@ sudo apt-get install nginx
 # confingure nginx
 echo $seperator "Launching uwsgi" $seperator
 sleep 2
-#sudo uwsgi --socket /home/ubuntu/chirp.sock --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 10 --threads 2 --chmod-socket=666 --logto /home/ubuntu/uwsgi.log --daemonize /home/ubuntu/daemonize.log
-sudo uwsgi --socket /home/ubuntu/chirp.sock --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 1 --threads 1 --chmod-socket=666 --logto /home/ubuntu/uwsgi.log --daemonize /home/ubuntu/daemonize.log
+sed -ie 's/host_ip/'$host_ip'/g' /home/ubuntu/chirpchirp/nginxconfig/chirp_nginx.conf
+
+
+echo $seperator "Launching uwsgi" $seperator
+sleep 2
+sudo uwsgi --socket /home/ubuntu/chirp.sock --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 10 --threads 4 --chmod-socket=666 --logto /home/ubuntu/uwsgi.log --daemonize /home/ubuntu/daemonize.log
+#sudo uwsgi --socket /home/ubuntu/chirp.sock --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 10 --threads 4 --chmod-socket=666 --logto /home/ubuntu/uwsgi.log --daemonize /home/ubuntu/daemonize.log
+#sudo uwsgi --socket /home/ubuntu/chirp.sock --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 5 --threads 2 --chmod-socket=666
 echo $seperator "Connecting nginx to uwsgi" $seperator
 sleep 2
 sudo ln -s /home/ubuntu/chirpchirp/nginxconfig/chirp_nginx.conf /etc/nginx/sites-enabled/

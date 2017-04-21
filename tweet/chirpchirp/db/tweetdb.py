@@ -1,15 +1,11 @@
 import time
-
-import pymongo
 from bson import Binary
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from pymongo.errors import DuplicateKeyError
 from .. utils import searchDelegator
+from pymongo.errors import DuplicateKeyError
+
 # main file for database transactions
-
-
-# @Todo refactor this class
 # Serves as a mongoDB client
 class TweetDB:
     def __init__(self, user=None, tweet=None, search=None, follow=None, like=None):
@@ -20,8 +16,8 @@ class TweetDB:
         self.follow = follow
         self.like = like
         # connect to mongo
-        self.client = MongoClient('127.0.0.1', 27017)
-        # self.client = MongoClient('192.168.1.32', 27017)
+        # self.client = MongoClient('127.0.0.1', 27017)
+        self.client = MongoClient('192.168.1.54', 27017)
         self.db = self.client.tweet
         self.userDB = self.db.user
         self.tweetsDB = self.db.tweets
@@ -30,10 +26,10 @@ class TweetDB:
         self.likesDB = self.db.likes
 
     # insert disabled user
-    def insertdisable(self):
+    def insert_disable(self):
         u = self.user
         try:
-            self.userDB.insert({
+            f = self.userDB.insert({
                 "username": u.username,
                 "email": u.email,
                 "password": u.password,
@@ -44,7 +40,7 @@ class TweetDB:
             return False
 
     # verify user
-    def verifyuser(self):
+    def verify_user(self):
         # assume key matched abracadabra
         u = self.user
         result = self.userDB.update_one({"email": u.email}, {"$set": {"verified": True}}, upsert=False)
@@ -53,20 +49,37 @@ class TweetDB:
         return result.modified_count == 1 #v != None
 
     #
-    def isverified(self):
+    def is_verified(self):
         u = self.user
         return self.userDB.find({"username": u.username, "password": u.password, "verified": True}).count() > 0
 
     #
-    def getuid(self):
+    def get_uid(self):
         u = self.user
         doc = self.userDB.find_one({"username": u.username, "password": u.password})
         return str(doc["_id"])
 
     # post a tweet
-    def posttweet(self):
+    def post_tweet(self):
         t = self.tweet
-        tweetDocument = {
+        if t.is_retweet == True:
+            # increase number of
+            retweet_content = t.content[3:]
+            retweet = self.tweetsDB.find_one({"content": retweet_content})
+            print '==> {is_retweet} {retweet_content:', retweet_content, ": retweet obj (if found):", retweet, ':'
+            if retweet == None:
+                print '=> no retweet found :('
+                # insert anonymous tweet
+                # return None
+            else:
+                print 'Non-anonymous-', retweet_content, '-'
+                id = retweet["_id"]
+                self.tweetsDB.update_one({"_id": ObjectId(id)}, {"$inc": {"retweets": 1}})
+            # self.tweetsDB.update_one({"content": retweet_content}, {"$inc": {"retweets": 1}})
+        else:
+            print '==>non_retweet content-', t.content,'-'
+        # insert new tweet
+        tweet_document = {
             "uid": t.uid,
             "username": t.uname,
             "content": t.content,
@@ -74,50 +87,71 @@ class TweetDB:
             "likes": 0,
             "retweets": 0
         }
-        if(t.parent != None):
-            tweetDocument["parent"] = t.parent
-        if(t.media != None):
-            tweetDocument["media"] = t.media
-        return str(self.tweetsDB.insert(tweetDocument))
+        # set parent and media if necessary
+        if t.parent != None:
+            tweet_document["parent"] = t.parent
+        if t.media != None:
+            tweet_document["media"] = t.media
+        return str(self.tweetsDB.insert(tweet_document))
 
-    # increase number of tweets by one
     def like_tweet(self, tid, uid):
         lmodel = self.like
         like_document = self.likesDB.find_one({"uid": uid, "tid": tid})
         if like_document != None:
             if like_document["liked"] == "true" and lmodel.like == True:
-                    return
+                return
             elif like_document["liked"] == "false" and lmodel.like == False:
-                    return
-            self.likesDB.update({"uid": uid, "tid": tid}, {"liked": "true" if lmodel.like == True else "false"})
+                return
+            # self.likesDB.update({"uid": uid, "tid": tid}, {"liked": "true" if lmodel.like == True else "false"})
+            self.likesDB.update({"uid": uid, "tid": tid}, {"$set": {"liked": "true" if lmodel.like == True else "false"}})
         else:
             self.likesDB.insert({"uid": uid, "tid": tid, "liked": "true" if lmodel.like == True else "false"})
         amount = 1 if lmodel.like == True else -1
         self.tweetsDB.update({'_id': ObjectId(tid)}, {'$inc': {'likes': amount}})
 
+
     # individual tweet search
-    def itemsearch(self, id):
+    def retrieve_tweet(self, id):
         t = self.tweetsDB.find_one({"_id": ObjectId(id)})
         if t is None:
             return {
                 "status": "error",
                 "error": "Id does not exist"
             }
-        return {
+
+        tweet_response = {
             "status": "OK",
             "item": {
-                "id": str(t["_id"]),
-                "username": t["username"],
-                "content": t["content"],
-                "timestamp": t["tweetstamp"],
-                "media": t.get("media", [])
+            "id": str(t["_id"]),
+            "username": t["username"],
+            "content": t["content"],
+            "timestamp": t["tweetstamp"],
+            "media": t.get("media", [])
             }
         }
+        if t.get("parent", None) != None:
+            tweet_response["item"]["parent"] = t["parent"]
+        return tweet_response
+
 
     # deletes tweet associated with id
+    # returns True if able to delte completely, False ow
     def delete_tweet(self, id):
-        result = self.tweetsDB.delete_one({"_id": ObjectId(id)})
-        return "Success" if result.deleted_count == 1 else "Failure"
+        tweet_doc = self.tweetsDB.find_one({"_id": ObjectId(id)})
+        if tweet_doc == None:
+            return False
+        # retrieve media array (if necessary)
+        media_array = tweet_doc.get("media", None)
+        # delete tweet
+        self.tweetsDB.delete_one({"_id": ObjectId(id)})
+        # remove all media associated with tweet
+        if media_array != None:
+            for media in media_array:
+                print 'deleting...', media
+                self.mediaDB.delete_one({"_id": ObjectId(media)})
+        return True
+
+
 
     # search query
     def tweetsearch(self, loggedin_username):
@@ -128,14 +162,14 @@ class TweetDB:
         }
         # filter by username
         if searchmodel.username != None:
-            return searchDelegate.search_username(searchmodel=searchmodel,tweetsDB=self.tweetsDB,results=results)
+            return searchDelegator.search_username(searchmodel=searchmodel,tweetsDB=self.tweetsDB,results=results)
         # filter by users that the logged in user is following
         if searchmodel.following == True:
-            return searchDelegate.search_following(loggedin_username=loggedin_username,followsDB=self.followsDB,tweetsDB=self.tweetsDB,searchmodel=searchmodel,results=results)
+            return searchDelegator.search_following(loggedin_username=loggedin_username,followsDB=self.followsDB,tweetsDB=self.tweetsDB,searchmodel=searchmodel,results=results)
         else:
             # don't filter by users that user is following
             # if query string is specified
-            return searchDelegate.search_not_following(tweetsDB=self.tweetsDB, searchmodel=searchmodel, results=results)
+            return searchDelegator.search_not_following(tweetsDB=self.tweetsDB, searchmodel=searchmodel, results=results)
 
 
     # this will follow or unfollow a user
@@ -144,7 +178,6 @@ class TweetDB:
         follow_model = self.follow
         status = True
         if follow_model.follow == True:
-            print curr_uname, 'following', follow_model.username
             # insert into database, without duplicates.
             upsert_record = {
                 "username": follow_model.username,
@@ -152,7 +185,6 @@ class TweetDB:
             }
             self.followsDB.update_one(upsert_record,{'$set':upsert_record},upsert=True)
         elif follow_model.follow == False:
-            print curr_uname, 'unfollowing', follow_model.username
             # delete record representing a follow relationship
             self.followsDB.delete_one({
                 "username": follow_model.username,
@@ -187,7 +219,6 @@ class TweetDB:
     # Gets user profile information
     def retrieve_user(self, username):
         doc = self.userDB.find_one({"username": username})
-        print "tweetdb(166)", "retrieved user:", str(doc)
         if(doc==None):
             return None
         following_count = self.followsDB.find({"follower_username": username}).count()
@@ -212,6 +243,8 @@ class TweetDB:
     # retrieves media
     def get_media(self, mid):
         media = self.mediaDB.find_one({"_id": ObjectId(mid)})
+        if media == None:
+            return None
         return media["content"]
 
     # close mongo connection

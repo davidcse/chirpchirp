@@ -26,6 +26,7 @@ def follow(request):
 
 
 # /user/<username>
+@csrf_exempt
 def user(request, username):
     print 'follow.py(30)', username
     db = TweetDB()

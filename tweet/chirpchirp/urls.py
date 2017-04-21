@@ -19,7 +19,7 @@ urlpatterns = [
     # /item/<id>
     url(r'^item/(?P<id>[\w\d]+)/?$', tweet.item, name="item"),
     # /item/<id>/like
-    url(r'^item/(?P<id>[\w\d]+)/like/?$', tweet.like, name="item"),
+    url(r'^item/(?P<id>[\w\d]+)/like/?$', tweet.like, name="like"),
     # /search
     url(r'^search/?$', tweet.search, name="search"),
     # /follow
@@ -31,7 +31,7 @@ urlpatterns = [
     # /user/<username>/following
     url(r'^user/(?P<username>[\w\d]+)/following/?$', follow.following, name='following'),
     # adds media
-    url(r'^addmedia', media.add_media, name='addmedia'),
+    url(r'^addmedia', media.addmedia, name='addmedia'),
     # retrieves media
     url(r'^media/(?P<id>[\w\d]+)?$', media.retrieve, name='media'),
     # /profile
@@ -44,5 +44,5 @@ urlpatterns = [
     url(r'^homepage$', views.homepage, name="homepage"),
 
     # /index
-    url(r'^/?$', views.index, name="index")
+    url(r'^$', views.index, name="index")
 ]

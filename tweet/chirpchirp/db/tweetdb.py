@@ -62,24 +62,24 @@ class TweetDB:
     # post a tweet
     def post_tweet(self):
         t = self.tweet
-        if t.is_retweet == True:
-            print '==>is_retweet'
-            prefix = "RT "
-            # increase number of
-            print '====>content (without)', t.content[len(prefix):]
-            print '====>content (with)', t.content
-            retweet_content = t.content[len(prefix):]
-            retweet = self.tweetsDB.find_one({"content": retweet_content})
-            id = retweet["_id"]
-            print '=> retweet', retweet
-            print '=> id', id
-            # if retweet == None:
-            #     return None
-            self.tweetsDB.update_one({"_id": ObjectId(id)}, {"$inc": {"retweets": 1}})
-            # self.tweetsDB.update_one({"content": retweet_content}, {"$inc": {"retweets": 1}})
-        else:
-            print '==>non_retweet'
-            print '===>content', t.content
+        # if t.is_retweet == True:
+        #     print '==>is_retweet'
+        #     prefix = "RT "
+        #     # increase number of
+        #     print '====>content (without)', t.content[len(prefix):]
+        #     print '====>content (with)', t.content
+        #     retweet_content = t.content[len(prefix):]
+        #     retweet = self.tweetsDB.find_one({"content": retweet_content})
+        #     id = retweet["_id"]
+        #     print '=> retweet', retweet
+        #     print '=> id', id
+        #     # if retweet == None:
+        #     #     return None
+        #     self.tweetsDB.update_one({"_id": ObjectId(id)}, {"$inc": {"retweets": 1}})
+        #     # self.tweetsDB.update_one({"content": retweet_content}, {"$inc": {"retweets": 1}})
+        # else:
+        #     print '==>non_retweet'
+        #     print '===>content', t.content
         # insert new tweet
         tweet_document = {
             "uid": t.uid,

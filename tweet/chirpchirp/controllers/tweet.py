@@ -13,6 +13,7 @@ from .. utils import auth
 @csrf_exempt
 def additem(request):
     if not auth.auth_session(request):
+        print 'uhoh not logged in ->', request.session
         return responses.err_response("Please login before adding item")
     uname = request.session.get("uname","")
     uid = request.session.get("uid","")

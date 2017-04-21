@@ -19,10 +19,10 @@ def additem(request):
     t = TweetModel(uname, uid, request)
     db = TweetDB(tweet=t)
     tid = db.post_tweet()
-    # if tid == None:
-    #     db.close()
-    #     return responses.err_response("Cannot find you id for retweet.")
-    print 'add_item tid=>', tid
+    if tid == None:
+        db.close()
+        return responses.err_response("Cannot retweet a non-existent tweet.")
+    print 'success tweet: tid=>', tid
     db.close()
     return responses.id_response(tid)
 

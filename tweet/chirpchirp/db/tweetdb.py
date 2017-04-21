@@ -65,6 +65,7 @@ class TweetDB:
         if t.is_retweet == True:
             prefix = "RT "
             # increase number of
+            print 'content', t.content[len(prefix)]
             retweet_content = t.content[len(prefix):]
             retweet = self.tweetsDB.find_one({"content": retweet_content})
             if retweet == None:

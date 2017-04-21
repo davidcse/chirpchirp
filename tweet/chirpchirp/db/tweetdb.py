@@ -140,16 +140,14 @@ class TweetDB:
         tweet_doc = self.tweetsDB.find_one({"_id": ObjectId(id)})
         if tweet_doc == None:
             return False
-        # delete tweet
-        self.tweetsDB.delete_one({"_id": ObjectId(id)})
         # retrieve media array (if necessary)
         media_array = tweet_doc.get("media", None)
-        if media_array == None:
-            self.tweetsDB.delete_one({"_id": ObjectId(id)})
-        else:
-            # remove all media associated with tweet
-            for media in media_array:
-                self.mediaDB.delete_one({"_id": ObjectId(media)})
+        # delete tweet
+        self.tweetsDB.delete_one({"_id": ObjectId(id)})
+        # remove all media associated with tweet
+        # if media_array != None:
+        #     for media in media_array:
+        #         self.mediaDB.delete_one({"_id": ObjectId(media)})
         return True
 
 

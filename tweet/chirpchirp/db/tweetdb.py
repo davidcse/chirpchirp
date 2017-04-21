@@ -66,19 +66,18 @@ class TweetDB:
             # increase number of
             retweet_content = t.content[3:]
             retweet = self.tweetsDB.find_one({"content": retweet_content})
-            print '==> is_retweet'
-            print '====> content (with)', t.content
-            print '====> content (without)', retweet_content
-            print '=> retweet', retweet
+            print '==> {is_retweet} {retweet_content:', retweet_content, ": retweet obj (if found):", retweet, ':'
             if retweet == None:
-                return None
-            id = retweet["_id"]
-            print '=> id', id
-            self.tweetsDB.update_one({"_id": ObjectId(id)}, {"$inc": {"retweets": 1}})
+                print '=> no retweet found :('
+                # insert anonymous tweet
+                # return None
+            else:
+                print 'Non-anonymous-', retweet_content, '-'
+                id = retweet["_id"]
+                self.tweetsDB.update_one({"_id": ObjectId(id)}, {"$inc": {"retweets": 1}})
             # self.tweetsDB.update_one({"content": retweet_content}, {"$inc": {"retweets": 1}})
         else:
-            print '==>non_retweet'
-            print '===>content', t.content
+            print '==>non_retweet content-', t.content,'-'
         # insert new tweet
         tweet_document = {
             "uid": t.uid,

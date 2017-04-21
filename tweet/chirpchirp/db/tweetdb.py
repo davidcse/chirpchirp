@@ -66,14 +66,14 @@ class TweetDB:
             # increase number of
             retweet_content = t.content[3:]
             retweet = self.tweetsDB.find_one({"content": retweet_content})
-            id = retweet["_id"]
             print '==> is_retweet'
             print '====> content (with)', t.content
             print '====> content (without)', retweet_content
             print '=> retweet', retweet
-            print '=> id', id
             if retweet == None:
                 return None
+            id = retweet["_id"]
+            print '=> id', id
             self.tweetsDB.update_one({"_id": ObjectId(id)}, {"$inc": {"retweets": 1}})
             # self.tweetsDB.update_one({"content": retweet_content}, {"$inc": {"retweets": 1}})
         else:

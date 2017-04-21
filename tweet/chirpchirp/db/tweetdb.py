@@ -244,6 +244,8 @@ class TweetDB:
     # retrieves media
     def get_media(self, mid):
         media = self.mediaDB.find_one({"_id": ObjectId(mid)})
+        if media == None:
+            return None
         return media["content"]
 
     # close mongo connection

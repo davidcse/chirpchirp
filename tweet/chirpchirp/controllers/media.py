@@ -16,6 +16,8 @@ def retrieve(request, id):
     db = TweetDB()
     content = db.get_media(id)
     db.close()
+    if content == None:
+        return responses.err_response("The tweet associated with this media has been removed")
     r = HttpResponse(content)
     r["Content-Type"] = "image/jpg"
     return r

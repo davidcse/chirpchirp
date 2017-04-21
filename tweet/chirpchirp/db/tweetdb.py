@@ -145,9 +145,9 @@ class TweetDB:
         # delete tweet
         self.tweetsDB.delete_one({"_id": ObjectId(id)})
         # remove all media associated with tweet
-        # if media_array != None:
-        #     for media in media_array:
-        #         self.mediaDB.delete_one({"_id": ObjectId(media)})
+        if media_array != None:
+            for media in media_array:
+                self.mediaDB.delete_one({"_id": ObjectId(media)})
         return True
 
 

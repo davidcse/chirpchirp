@@ -25,7 +25,6 @@ sh.addShard("shard4/192.168.1.48:27040");
 sh.enableSharding("tweet");
 sh.shardCollection("tweet.user", {"email": 1});
 sh.shardCollection("tweet.tweets", {"username": 1});
-// potential problem b/c of query on username
 sh.shardCollection("tweet.follows", {"follower_username": 1});
 sh.shardCollection("tweet.media", {"_id": 1});
 sh.shardCollection("tweet.likes", {"uid": 1, "tid": 1});

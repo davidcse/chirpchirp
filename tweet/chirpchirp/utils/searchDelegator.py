@@ -7,6 +7,8 @@ import pprint
 #############################
 #   SEARCH : RANKING
 #############################
+
+
 # checks what ranking algorithm to use based on the search model.
 def is_rankfield_interest(searchmodel):
     if(searchmodel.rank.lower().strip() == "time"):
@@ -58,13 +60,13 @@ def rank_result_tweets(filtered_tweets, isInterest):
 def insert_tweet_nonrepeat(tweet,results):
     if tweet["content"] not in results["items"]:
         results["items"].append({
-        "id": str(tweet["_id"]),
-        "username": tweet["username"],
-        "content": tweet["content"],
-        "timestamp": tweet["tweetstamp"],
-        "likes": tweet["likes"],
-        "retweets": tweet["retweets"]
-    })
+            "id": str(tweet["_id"]),
+            "username": tweet["username"],
+            "content": tweet["content"],
+            "timestamp": tweet["tweetstamp"],
+            "likes": tweet["likes"],
+            "retweets": tweet["retweets"]
+        })
 
 
 # fills the search results tweet into the results' item field (array).
@@ -119,7 +121,11 @@ def search_following(loggedin_username, followsDB, tweetsDB, searchmodel, result
             results = fill_result_items(tweets,results, searchmodel.limit, searchmodel.replies)
             # if len(results) >= searchmodel.limit:
             #     break
-    return rank_result_tweets(results, is_rankfield_interest(searchmodel))
+    ranked_results = rank_result_tweets(results, is_rankfield_interest(searchmodel))
+    return {
+        "status": "OK",
+        "items": ranked_results[:searchmodel.limit]  # trim by limit
+    }
 
 
 # don't filter by users that user is following
@@ -137,8 +143,11 @@ def search_not_following(tweetsDB, searchmodel, results):
         results = fill_result_items(tweets,results, searchmodel.limit, searchmodel.replies)
         # if len(results) >= searchmodel.limit:
         #     break
-    return rank_result_tweets(results, is_rankfield_interest(searchmodel))
-
+    ranked_results = rank_result_tweets(results, is_rankfield_interest(searchmodel))
+    return {
+        "status": "OK",
+        "items": ranked_results[:searchmodel.limit]  # trim by limit
+    }
 
 # search only the tweets posted by a specific user of interest.
 def search_username(tweetsDB, searchmodel, results):
@@ -155,7 +164,8 @@ def search_username(tweetsDB, searchmodel, results):
         results = fill_result_items(tweets,results, searchmodel.limit, searchmodel.replies)
         # if len(results) >= searchmodel.limit:
         #     break
-    arr =  rank_result_tweets(results, is_rankfield_interest(searchmodel))
-    arr = arr[:searchmodel.limit]
-    pprint.pprint(arr, indent=4)
-    return {}
+    ranked_results = rank_result_tweets(results, is_rankfield_interest(searchmodel))
+    return {
+        "status": "OK",
+        "items": ranked_results[:searchmodel.limit] # trim by limit
+    }

@@ -101,13 +101,10 @@ def insert_tweet_nonrepeat(tweet,results):
     })
 
 
-
 # fills the search results tweet into the results' item field (array).
 # breaks early if beyond the search limit or if tweets are repeated.
 def fill_result_items(filtered_tweets, results,searchlimit):
     for tweet in filtered_tweets:
-        if len(results["items"]) >= searchlimit:
-            return results
         insert_tweet_nonrepeat(tweet,results)
     return results
 
@@ -146,16 +143,14 @@ def search_following(loggedin_username, followsDB, tweetsDB, searchmodel, result
                 "tweetstamp": {"$lte": searchmodel.tweetstamp}
             }
             modify_searchconfig_parentfield(searchConfig,searchmodel)
-            tweets = tweetsDB.find(searchConfig).limit(searchmodel.limit)
-            results = fill_result_items(tweets,results, searchmodel.limit)
-            if len(results) >= searchmodel.limit:
-                break
+            tweets = tweetsDB.find(searchConfig)
+            results =  fill_result_items(tweets,results, searchmodel.limit)
     return rank_result_tweets(results, is_rankfield_interest(searchmodel))
 
 
 # don't filter by users that user is following
 # if query string is specified
-def search_not_following(tweetsDB, searchmodel, results):
+def search_not_following(tweetsDB, searchmodel,results):
     for word in searchmodel.q:
         if word != ".*":
             word = r"\b{}\b".format(word)
@@ -164,15 +159,13 @@ def search_not_following(tweetsDB, searchmodel, results):
             "tweetstamp": {"$lte": searchmodel.tweetstamp}
         }
         modify_searchconfig_parentfield(searchConfig,searchmodel)
-        tweets = tweetsDB.find(searchConfig).limit(searchmodel.limit)
+        tweets = tweetsDB.find(searchConfig)
         results = fill_result_items(tweets,results, searchmodel.limit)
-        if len(results) >= searchmodel.limit:
-            break
     return rank_result_tweets(results, is_rankfield_interest(searchmodel))
 
 
 # search only the tweets posted by a specific user of interest.
-def search_username(tweetsDB, searchmodel, results):
+def search_username(tweetsDB, searchmodel,results):
     for word in searchmodel.q:
         if word != ".*":
             word = r"\b{}\b".format(word)
@@ -182,10 +175,6 @@ def search_username(tweetsDB, searchmodel, results):
             "tweetstamp": {"$lte": searchmodel.tweetstamp}
         }
         modify_searchconfig_parentfield(searchConfig,searchmodel)
-        # this limit may be problematic (what if a higher rank exists in a tweet not in this limit!)
-        tweets = tweetsDB.find(searchConfig).limit(searchmodel.limit)
+        tweets = tweetsDB.find(searchConfig)
         results = fill_result_items(tweets,results, searchmodel.limit)
-        # this also may be a potential problem... what if the search should keep going...
-        if len(results) >= searchmodel.limit:
-            break
     return rank_result_tweets(results, is_rankfield_interest(searchmodel))

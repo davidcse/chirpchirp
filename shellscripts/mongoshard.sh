@@ -6,6 +6,8 @@
 # ./mongoshard.sh 192.168.1.46 27040
 # ./mongoshard.sh 192.168.1.47 27040
 # ./mongoshard.sh 192.168.1.48 27040
+# ./mongoshard.sh 192.168.1.56 27040
+# ./mongoshard.sh 192.168.1.57 27040
 
 
 # script variables
@@ -34,10 +36,12 @@ mkdir mongo/shard
 echo $seperator "Running Shard" $seperator
 sleep $sleep_limit
 mongod --shardsvr --replSet shard1 --dbpath /home/ubuntu/mongo/shard/ --bind_ip $host_ip --port $host_port --logpath /home/ubuntu/mongo/mongo_logs/shard.log --logappend --fork
-#mongod --shardsvr --replSet shard1 --dbpath /home/ubuntu/mongo/shard/ --bind_ip $host_ip --port 27040 --logpath /home/ubuntu/mongo/mongo_logs/shard.log --logappend --fork
+#mongod --shardsvr --replSet shard1 --dbpath /home/ubuntu/mongo/shard/ --bind_ip 192.168.1.45 --port 27040 --logpath /home/ubuntu/mongo/mongo_logs/shard.log --logappend --fork
 #mongod --shardsvr --replSet shard2 --dbpath /home/ubuntu/mongo/shard/ --bind_ip 192.168.1.46 --port 27040 --logpath /home/ubuntu/mongo/mongo_logs/shard.log --logappend --fork
 #mongod --shardsvr --replSet shard3 --dbpath /home/ubuntu/mongo/shard/ --bind_ip 192.168.1.47 --port 27040 --logpath /home/ubuntu/mongo/mongo_logs/shard.log --logappend --fork
 #mongod --shardsvr --replSet shard4 --dbpath /home/ubuntu/mongo/shard/ --bind_ip 192.168.1.48 --port 27040 --logpath /home/ubuntu/mongo/mongo_logs/shard.log --logappend --fork
+#mongod --shardsvr --replSet shard5 --dbpath /home/ubuntu/mongo/shard/ --bind_ip 192.168.1.56 --port 27040 --logpath /home/ubuntu/mongo/mongo_logs/shard.log --logappend --fork
+#mongod --shardsvr --replSet shard6 --dbpath /home/ubuntu/mongo/shard/ --bind_ip 192.168.1.57 --port 27040 --logpath /home/ubuntu/mongo/mongo_logs/shard.log --logappend --fork
 #(Ignore) mongod --bind_ip 192.168.1.37 --port 27017 --dbpath /home/ubuntu/db --logpath /home/ubuntu/log/user.log --logappend --fork
 
 # retrieving js file

@@ -21,7 +21,7 @@ class TweetModel:
         params = json.loads(body)
         self.uname = uname
         self.uid = uid
-        self.content = params.get("content")
+        self.content = params.get("content").encode('utf-8')
         prefix = "RT "
         if self.content.startswith(prefix):
             self.is_retweet = True

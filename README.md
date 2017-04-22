@@ -45,3 +45,5 @@ sudo sysctl --system
 ulimit -f unlimited -t unlimited -v unlimited -n 64000 -m unlimited -u 64000
 ulimit -f
 sysctl -a
+
+http://stackoverflow.com/questions/22697584/nginx-uwsgi-104-connection-reset-by-peer-while-reading-response-header-from-u

@@ -14,6 +14,12 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PRODUCTION = True
+
+# memcached sessions
+SESSION_CACHE = '192.168.1.54:11211'
+if not PRODUCTION:
+    SESSION_CACHE = '127.0.0.1:11211'
 
 
 # Quick-start development settings - unsuitable for production
@@ -89,8 +95,7 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         # config server will run memcached
-        'LOCATION': '192.168.1.54:11211',
-        # 'LOCATION': '127.0.0.1:11211'
+        'LOCATION': SESSION_CACHE
     }
 }
 

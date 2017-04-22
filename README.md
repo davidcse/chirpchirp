@@ -5,8 +5,10 @@ memcached
 mongodb
 nginx(production)
 
-
-
+# PRODUCTION vs DEV
+In settings tweet folder /tweet/settings.py
+In application chirpchirp folder /chirpchirp/config/settings.py
+Change the variable PRODUCTION = True or False for both files.
 
 
 uname -n | sudo tee /usr/share/nginx/html/index.html

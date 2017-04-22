@@ -4,7 +4,8 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 from .. utils import searchDelegator
 from pymongo.errors import DuplicateKeyError
-from .. utils import memcacheService.MemcacheService
+from .. utils import memcacheService
+from .. config import settings
 
 # main file for database transactions
 # Serves as a mongoDB client
@@ -17,9 +18,8 @@ class TweetDB:
         self.follow = follow
         self.like = like
         # connect to mongo
-        # self.client = MongoClient('127.0.0.1', 27017)
-        self.client = MongoClient('192.168.1.54', 27017)
-        self.memcache = MemcacheService('127.0.0.1',11211)
+        self.client = MongoClient(settings.MONGO_IP, settings.MONGO_PORT)
+        self.memcache = memcacheService.MemcacheService(settings.MEMCACHE_DB_IP,settings.MEMCACHE_DB_PORT)
         self.db = self.client.tweet
         self.userDB = self.db.user
         self.tweetsDB = self.db.tweets

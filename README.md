@@ -36,3 +36,12 @@ sudo killall uwsgi
 Things to question:<br>
 If i delete a retweet should the number of retweets for that tweet go down by one
 
+
+/etc/sysctl.conf
+fs.file-max = 500000
+sudo sysctl --system
+
+
+ulimit -f unlimited -t unlimited -v unlimited -n 64000 -m unlimited -u 64000
+ulimit -f
+sysctl -a

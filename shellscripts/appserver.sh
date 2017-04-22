@@ -25,6 +25,7 @@ sudo apt-get install git
 echo $seperator "Cloning Project" $seperator
 sleep 2
 git clone $project_repo
+#git clone https://github.com/elvis-alexander/chirpchirp
 
 # install all project dependencies (python related)
 echo $seperator "Update apt-get" $seperator

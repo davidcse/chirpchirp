@@ -36,7 +36,7 @@ mkdir mongo/shard
 echo $seperator "Running Shard" $seperator
 sleep $sleep_limit
 mongod --shardsvr --replSet shard1 --dbpath /home/ubuntu/mongo/shard/ --bind_ip $host_ip --port $host_port --logpath /home/ubuntu/mongo/mongo_logs/shard.log --logappend --fork
-#mongod --shardsvr --replSet shard1 --dbpath /home/ubuntu/mongo/shard/ --bind_ip $host_ip --port 27040 --logpath /home/ubuntu/mongo/mongo_logs/shard.log --logappend --fork
+#mongod --shardsvr --replSet shard1 --dbpath /home/ubuntu/mongo/shard/ --bind_ip 192.168.1.45 --port 27040 --logpath /home/ubuntu/mongo/mongo_logs/shard.log --logappend --fork
 #mongod --shardsvr --replSet shard2 --dbpath /home/ubuntu/mongo/shard/ --bind_ip 192.168.1.46 --port 27040 --logpath /home/ubuntu/mongo/mongo_logs/shard.log --logappend --fork
 #mongod --shardsvr --replSet shard3 --dbpath /home/ubuntu/mongo/shard/ --bind_ip 192.168.1.47 --port 27040 --logpath /home/ubuntu/mongo/mongo_logs/shard.log --logappend --fork
 #mongod --shardsvr --replSet shard4 --dbpath /home/ubuntu/mongo/shard/ --bind_ip 192.168.1.48 --port 27040 --logpath /home/ubuntu/mongo/mongo_logs/shard.log --logappend --fork

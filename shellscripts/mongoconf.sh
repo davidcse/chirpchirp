@@ -32,6 +32,7 @@ mkdir mongo/config/conf
 echo $seperator "Running config server" $seperator
 sleep $sleep_limit
 mongod --configsvr --replSet conf --dbpath ~/mongo/config/conf --bind_ip $host_ip --port $host_port --logpath ~/mongo/mongo_logs/conf.log --fork
+#mongod --configsvr --replSet conf --dbpath ~/mongo/config/conf --bind_ip 192.168.1.49 --port 27030 --logpath ~/mongo/mongo_logs/conf.log --fork
 
 # retrieving js file
 echo $seperator "Wget js file" $seperator

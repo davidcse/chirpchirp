@@ -4,6 +4,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 from .. utils import searchDelegator
 from pymongo.errors import DuplicateKeyError
+from .. utils import memcacheService.MemcacheService
 
 # main file for database transactions
 # Serves as a mongoDB client
@@ -18,6 +19,7 @@ class TweetDB:
         # connect to mongo
         # self.client = MongoClient('127.0.0.1', 27017)
         self.client = MongoClient('192.168.1.54', 27017)
+        self.memcache = MemcacheService('127.0.0.1',11211)
         self.db = self.client.tweet
         self.userDB = self.db.user
         self.tweetsDB = self.db.tweets
@@ -112,13 +114,18 @@ class TweetDB:
 
     # individual tweet search
     def retrieve_tweet(self, id):
-        t = self.tweetsDB.find_one({"_id": ObjectId(id)})
+        searchConfig = {"_id": ObjectId(id)}
+        # search memcache first if there is a cached result.
+        if(self.memcache.get({"tweetsDB" : searchConfig})):
+            return self.memcache.get({"tweetsDB" : searchConfig})
+        # query the database, not in cache.
+        t = self.tweetsDB.find_one(searchConfig)
         if t is None:
             return {
                 "status": "error",
                 "error": "Id does not exist"
             }
-
+        # found a result tweet
         tweet_response = {
             "status": "OK",
             "item": {
@@ -131,24 +138,34 @@ class TweetDB:
         }
         if t.get("parent", None) != None:
             tweet_response["item"]["parent"] = t["parent"]
+        # add query and result to memcache
+        self.memcache.set({"tweetsDB" : searchConfig}, tweet_response)
         return tweet_response
 
 
     # deletes tweet associated with id
     # returns True if able to delte completely, False ow
     def delete_tweet(self, id):
-        tweet_doc = self.tweetsDB.find_one({"_id": ObjectId(id)})
+        searchConfig = {"_id": ObjectId(id)}
+        tweet_doc = self.tweetsDB.find_one(searchConfig)
         if tweet_doc == None:
             return False
         # retrieve media array (if necessary)
         media_array = tweet_doc.get("media", None)
         # delete tweet
-        self.tweetsDB.delete_one({"_id": ObjectId(id)})
+        self.tweetsDB.delete_one(searchConfig)
+        # remove from memcached as well.
+        if(self.memcache.get({"tweetsDB":searchConfig})):
+            self.memcache.delete({"tweetsDB" : searchConfig})
         # remove all media associated with tweet
         if media_array != None:
             for media in media_array:
                 print 'deleting...', media
-                self.mediaDB.delete_one({"_id": ObjectId(media)})
+                mediaSearchConfig = {"_id": ObjectId(media)}
+                self.mediaDB.delete_one(mediaSearchConfig)
+                # remove media from memcache as well
+                if(self.memcache.get({"mediaDB": mediaSearchConfig})):
+                    self.memcache.delete({"mediaDB": mediaSearchConfig})
         return True
 
 
@@ -242,10 +259,18 @@ class TweetDB:
 
     # retrieves media
     def get_media(self, mid):
-        media = self.mediaDB.find_one({"_id": ObjectId(mid)})
+        searchConfig = {"_id": ObjectId(mid)}
+        #check if query for this db is already in memcache
+        if(self.memcache.get({"mediaDB" : searchConfig})):
+            return self.memcache.get({"mediaDB" : searchConfig})
+        #check actual db for this query
+        media = self.mediaDB.find_one(searchConfig)
         if media == None:
             return None
-        return media["content"]
+        response = media["content"]
+        # store the query,result specific to this db, into memcache.
+        self.memcache.set({"mediaDB" : searchConfig}, response)
+        return response
 
     # close mongo connection
     def close(self):

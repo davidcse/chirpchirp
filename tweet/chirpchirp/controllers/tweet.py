@@ -7,7 +7,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from .. utils import auth
 
-
 # @Todo implement retweet :)
 # creates a new tweet {content}
 @csrf_exempt

@@ -11,9 +11,7 @@ class MemcacheService:
     def get(self,query):
         # turn the mongodb search query into a str key.
         query = self.compressedToQueryString(query)
-        if query in self.mc:
-            return self.mc.get(query)
-        return None
+        return self.mc.get(query)
 
 
 
@@ -29,7 +27,7 @@ class MemcacheService:
     def delete(self,query):
         # turn the mongodb search query into a str key.
         query = self.compressedToQueryString(query)
-        if query in self.mc:
+        if(self.get(query)):
             self.mc.delete(query)
 
 

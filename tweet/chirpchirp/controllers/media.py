@@ -21,5 +21,5 @@ def retrieve(request, id):
         r["Content-Type"] = "application/json"
         return r
     r = HttpResponse(content)
-    r["Content-Type"] = "image/jpg"
+    r["Content-Type"] = "image/png"
     return r

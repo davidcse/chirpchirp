@@ -34,12 +34,13 @@ footer {
     display: block;
 }
 
-#preview-image{
+.preview-image{
 	max-width: 50px;
 	max-height: 50px;
 	margin-left:100px;
 	position: relative;
 }
+
 /*body {
 	font-family: "Lato", sans-serif;
 }

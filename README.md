@@ -53,7 +53,13 @@ memcached server - {on appserver8}
 
 
 set up load balancer
+set up ulimit
+set up sysctl
 set up shards
 set up config
 set up mongos1
 set up mongos2
+
+Safety Checks:
+uilimit -u;
+sysctl fs.file-max

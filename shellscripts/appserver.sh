@@ -3,6 +3,7 @@
 # please add this in order to grant execution privlidges
 # chmod +x appserver.sh
 # USAGE {host_ip}
+# USAGE ./appserver.sh 172.31.30.234
 
 # script to set up an app server, will be responsible for downloading project, running uwsgi and nginx
 

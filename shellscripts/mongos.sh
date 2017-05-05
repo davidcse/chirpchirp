@@ -6,7 +6,7 @@
 
 
 # USAGE: ./mongos.sh {host_ip} {config_ip} {config_port} {shard1_ip} {shard2_ip} {shard3_ip} {shard4_ip} {shard5_ip} {shard6_ip} {shard7_ip} {shard8_ip}
-# USAGE: ./mongos.sh {54.175.131.133} {172.31.31.208} {27030} {172.31.20.176} {172.31.18.41} {172.31.21.197} {172.31.17.160} {172.31.28.21} {172.31.16.102} {172.31.16.97} {172.31.20.129}
+# USAGE: ./mongos.sh 172.31.16.177 172.31.31.208 27030 172.31.20.176 172.31.18.41 172.31.21.197 172.31.17.160 172.31.28.21 172.31.16.102 172.31.16.97 172.31.20.129
 
 
 # script variables
@@ -45,7 +45,8 @@ chmod -R 777 mongo/mongo_logs
 echo $seperator "Running Mongos" $seperator
 sleep $sleep_limit
 sudo mongos --configdb conf/$config_ip:$config_port --bind_ip $host_ip --port 27017 --logpath /home/ubuntu/mongo/mongo_logs/mongos.log --logappend --fork
-#mongos --configdb conf/192.168.1.49:27030 --bind_ip 192.168.1.54 --port 27017 --logpath /home/ubuntu/mongo/mongo_logs/mongos.log --logappend --fork
+# old=> mongos --configdb conf/192.168.1.49:27030 --bind_ip 192.168.1.54 --port 27017 --logpath /home/ubuntu/mongo/mongo_logs/mongos.log --logappend --fork
+# mongos --configdb conf/172.31.31.208:27030 --bind_ip 172.31.16.177 --port 27017 --logpath /home/ubuntu/mongo/mongo_logs/mongos.log --logappend --fork
 
 # retrieving js file
 echo $seperator "Wget js file" $seperator

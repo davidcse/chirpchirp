@@ -63,3 +63,7 @@ set up mongos2
 Safety Checks:
 ulimit -u;
 sysctl fs.file-max;
+
+mongos: {'172.31.16.177:27017', '172.31.30.19:27017'}
+memcache for app: {appserver8: 172.31.20.129}
+memcache for sessions: {lb: 172.31.22.172}

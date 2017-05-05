@@ -7,12 +7,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from .. utils import auth
 
-# @Todo implement retweet :)
-# creates a new tweet {content}
 @csrf_exempt
 def additem(request):
     if not auth.auth_session(request):
-        print 'uhoh not logged in ->', request.session
         return responses.err_response("Please login before adding item")
     uname = request.session.get("uname","")
     uid = request.session.get("uid","")
@@ -22,7 +19,6 @@ def additem(request):
     if tid == None:
         db.close()
         return responses.err_response("Cannot retweet a non-existent tweet.")
-    print 'success tweet: tid=>', tid
     db.close()
     return responses.id_response(tid)
 

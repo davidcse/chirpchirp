@@ -61,25 +61,19 @@ class TweetDB:
         doc = self.userDB.find_one({"username": u.username, "password": u.password})
         return str(doc["_id"])
 
+    def handle_retweet(self, t):
+        retweet_content = t.content[3:]
+        retweet = self.tweetsDB.find_one({"content": retweet_content})
+        if retweet != None:
+            id = retweet["_id"]
+            self.tweetsDB.update_one({"_id": ObjectId(id)}, {"$inc": {"retweets": 1}})
+        # insert anonymous tweet ?
+
     # post a tweet
     def post_tweet(self):
         t = self.tweet
         if t.is_retweet == True:
-            # increase number of
-            retweet_content = t.content[3:]
-            retweet = self.tweetsDB.find_one({"content": retweet_content})
-            print '==> {is_retweet} {retweet_content:', retweet_content, ": retweet obj (if found):", retweet, ':'
-            if retweet == None:
-                print '=> no retweet found :('
-                # insert anonymous tweet
-                # return None
-            else:
-                print 'Non-anonymous-', retweet_content, '-'
-                id = retweet["_id"]
-                self.tweetsDB.update_one({"_id": ObjectId(id)}, {"$inc": {"retweets": 1}})
-            # self.tweetsDB.update_one({"content": retweet_content}, {"$inc": {"retweets": 1}})
-        else:
-            print '==>non_retweet content-', t.content,'-'
+            self.handle_retweet(t)
         # insert new tweet
         tweet_document = {
             "uid": t.uid,

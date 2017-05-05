@@ -5,6 +5,16 @@
 # USAGE {host_ip}
 # USAGE ./appserver.sh 172.31.30.234
 
+# USAGE ./appserver.sh 172.31.29.112
+# USAGE ./appserver.sh 172.31.25.190
+# USAGE ./appserver.sh 172.31.30.218
+# USAGE ./appserver.sh 172.31.24.239
+# USAGE ./appserver.sh 172.31.28.151
+# USAGE ./appserver.sh 172.31.30.200
+# USAGE ./appserver.sh 172.31.23.234
+
+
+
 # script to set up an app server, will be responsible for downloading project, running uwsgi and nginx
 
 # @TODO implement an argument for ip_address

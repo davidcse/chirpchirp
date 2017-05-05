@@ -61,5 +61,5 @@ set up mongos1
 set up mongos2
 
 Safety Checks:
-uilimit -u;
-sysctl fs.file-max
+ulimit -u;
+sysctl fs.file-max;

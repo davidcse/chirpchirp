@@ -10,6 +10,17 @@
 # ./mongoshard.sh 192.168.1.57 27040
 
 
+# ./mongoshard.sh 172.31.20.176 27040 shard1
+# ./mongoshard.sh 172.31.18.41 27040 shard2
+# ./mongoshard.sh 172.31.21.197 27040 shard3
+# ./mongoshard.sh 172.31.17.160 27040 shard4
+# ./mongoshard.sh 172.31.28.21 27040 shard5
+# ./mongoshard.sh 172.31.16.102 27040 shard6
+# ./mongoshard.sh 172.31.16.97 27040 shard7
+# ./mongoshard.sh 172.31.20.129 27040 shard8
+
+
+
 # script variables
 host_ip=$1
 host_port=$2
@@ -44,6 +55,8 @@ mongod --shardsvr --replSet $repl_name --dbpath /home/ubuntu/mongo/shard/ --bind
 #mongod --shardsvr --replSet shard5 --dbpath /home/ubuntu/mongo/shard/ --bind_ip 192.168.1.56 --port 27040 --logpath /home/ubuntu/mongo/mongo_logs/shard.log --logappend --fork
 #mongod --shardsvr --replSet shard6 --dbpath /home/ubuntu/mongo/shard/ --bind_ip 192.168.1.57 --port 27040 --logpath /home/ubuntu/mongo/mongo_logs/shard.log --logappend --fork
 #(Ignore) mongod --bind_ip 192.168.1.37 --port 27017 --dbpath /home/ubuntu/db --logpath /home/ubuntu/log/user.log --logappend --fork
+
+#mongod --shardsvr --replSet shard1 --dbpath /home/ubuntu/mongo/shard/ --bind_ip 172.31.20.176 --port 27040 --logpath /home/ubuntu/mongo/mongo_logs/shard.log --logappend --fork
 
 # retrieving js file
 echo $seperator "Wget js file" $seperator

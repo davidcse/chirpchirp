@@ -1,7 +1,7 @@
 # APPLICATION CONFIGURATION
 
 # toggles which config variables to use
-PRODUCTION = False
+PRODUCTION = True
 
 # mongodb
 MONGO_IP = '192.168.1.54'

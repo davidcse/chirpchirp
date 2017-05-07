@@ -6,6 +6,9 @@
 
 # ./mongoconf.sh 172.31.31.208 27030
 
+
+# ./mongoconf.sh 192.168.1.85 27030
+
 # script variables
 seperator="---------------------"
 host_ip=$1

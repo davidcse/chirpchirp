@@ -3,14 +3,12 @@
 # please add this in order to grant execution privlidges
 # chmod +x appserver.sh
 # USAGE {host_ip}
-# USAGE ./appserver.sh 172.31.30.234
-# USAGE ./appserver.sh 172.31.29.112
-# USAGE ./appserver.sh 172.31.25.190 (good) 3
-# USAGE ./appserver.sh 172.31.30.218 (good) 4
-# USAGE ./appserver.sh 172.31.24.239 (good) 5
-# USAGE ./appserver.sh 172.31.28.151 (bad)
-# USAGE ./appserver.sh 172.31.30.200 (good) 7
-# USAGE ./appserver.sh 172.31.23.234 (good) 8
+# USAGE ./appserver.sh 192.168.1.70
+# USAGE ./appserver.sh 192.168.1.73
+# USAGE ./appserver.sh 192.168.1.76
+# USAGE ./appserver.sh 192.168.1.79
+
+
 
 
 

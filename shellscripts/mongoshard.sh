@@ -10,14 +10,11 @@
 # ./mongoshard.sh 192.168.1.57 27040
 
 
-# ./mongoshard.sh 172.31.20.176 27040 shard1
-# ./mongoshard.sh 172.31.18.41 27040 shard2
-# ./mongoshard.sh 172.31.21.197 27040 shard3
-# ./mongoshard.sh 172.31.17.160 27040 shard4
-# ./mongoshard.sh 172.31.28.21 27040 shard5
-# ./mongoshard.sh 172.31.16.102 27040 shard6
-# ./mongoshard.sh 172.31.16.97 27040 shard7
-# ./mongoshard.sh 172.31.20.129 27040 shard8
+# ./mongoshard.sh 192.168.1.70 27040 shard1
+# ./mongoshard.sh 192.168.1.73 27040 shard2
+# ./mongoshard.sh 192.168.1.76 27040 shard3
+# ./mongoshard.sh 192.168.1.79 27040 shard4
+
 
 
 

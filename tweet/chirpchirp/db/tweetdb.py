@@ -20,7 +20,7 @@ class TweetDB:
         # connect to mongo
         # self.client = MongoClient(['172.31.16.177:27017', '172.31.30.19:27017'])
         self.client = MongoClient(settings.MONGO_IP, settings.MONGO_PORT)
-        self.memcache = memcacheService.MemcacheService(settings.MEMCACHE_DB_IP,settings.MEMCACHE_DB_PORT)
+        # self.memcache = memcacheService.MemcacheService(settings.MEMCACHE_DB_IP,settings.MEMCACHE_DB_PORT)
         self.db = self.client.tweet
         self.userDB = self.db.user
         self.tweetsDB = self.db.tweets
@@ -111,8 +111,8 @@ class TweetDB:
     def retrieve_tweet(self, id):
         searchConfig = {"_id": ObjectId(id)}
         # search memcache first if there is a cached result.
-        if(self.memcache.get({"tweetsDB" : searchConfig})):
-            return self.memcache.get({"tweetsDB" : searchConfig})
+        # if(self.memcache.get({"tweetsDB" : searchConfig})):
+        #     return self.memcache.get({"tweetsDB" : searchConfig})
         # query the database, not in cache.
         t = self.tweetsDB.find_one(searchConfig)
         if t is None:
@@ -134,7 +134,7 @@ class TweetDB:
         if t.get("parent", None) != None:
             tweet_response["item"]["parent"] = t["parent"]
         # add query and result to memcache
-        self.memcache.set({"tweetsDB" : searchConfig}, tweet_response)
+        # self.memcache.set({"tweetsDB" : searchConfig}, tweet_response)
         return tweet_response
 
 
@@ -150,8 +150,8 @@ class TweetDB:
         # delete tweet
         self.tweetsDB.delete_one(searchConfig)
         # remove from memcached as well.
-        if(self.memcache.get({"tweetsDB":searchConfig})):
-            self.memcache.delete({"tweetsDB" : searchConfig})
+        # if(self.memcache.get({"tweetsDB":searchConfig})):
+        #     self.memcache.delete({"tweetsDB" : searchConfig})
         # remove all media associated with tweet
         if media_array != None:
             for media in media_array:
@@ -159,8 +159,8 @@ class TweetDB:
                 mediaSearchConfig = {"_id": ObjectId(media)}
                 self.mediaDB.delete_one(mediaSearchConfig)
                 # remove media from memcache as well
-                if(self.memcache.get({"mediaDB": mediaSearchConfig})):
-                    self.memcache.delete({"mediaDB": mediaSearchConfig})
+                # if(self.memcache.get({"mediaDB": mediaSearchConfig})):
+                #     self.memcache.delete({"mediaDB": mediaSearchConfig})
         return True
 
 
@@ -256,15 +256,15 @@ class TweetDB:
     def get_media(self, mid):
         searchConfig = {"_id": ObjectId(mid)}
         #check if query for this db is already in memcache
-        if(self.memcache.get({"mediaDB" : searchConfig})):
-            return self.memcache.get({"mediaDB" : searchConfig})
+        # if(self.memcache.get({"mediaDB" : searchConfig})):
+        #     return self.memcache.get({"mediaDB" : searchConfig})
         #check actual db for this query
         media = self.mediaDB.find_one(searchConfig)
         if media == None:
             return None
         response = media["content"]
         # store the query,result specific to this db, into memcache.
-        self.memcache.set({"mediaDB" : searchConfig}, response)
+        # self.memcache.set({"mediaDB" : searchConfig}, response)
         return response
 
     # close mongo connection

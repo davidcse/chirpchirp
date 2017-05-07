@@ -65,10 +65,10 @@ sed -ie 's/shard1_ip/'$shard1_ip'/g' mongos.js
 sed -ie 's/shard2_ip/'$shard2_ip'/g' mongos.js
 sed -ie 's/shard3_ip/'$shard3_ip'/g' mongos.js
 sed -ie 's/shard4_ip/'$shard4_ip'/g' mongos.js
-sed -ie 's/shard5_ip/'$shard5_ip'/g' mongos.js
-sed -ie 's/shard6_ip/'$shard6_ip'/g' mongos.js
-sed -ie 's/shard7_ip/'$shard7_ip'/g' mongos.js
-sed -ie 's/shard8_ip/'$shard8_ip'/g' mongos.js
+#sed -ie 's/shard5_ip/'$shard5_ip'/g' mongos.js
+#sed -ie 's/shard6_ip/'$shard6_ip'/g' mongos.js
+#sed -ie 's/shard7_ip/'$shard7_ip'/g' mongos.js
+#sed -ie 's/shard8_ip/'$shard8_ip'/g' mongos.js
 #sed -ie 's/shard1_port/'$shard1_port'/g' mongos.js
 
 # connect mongo client

@@ -18,8 +18,8 @@ class TweetDB:
         self.follow = follow
         self.like = like
         # connect to mongo
-        self.client = MongoClient(['172.31.16.177:27017', '172.31.30.19:27017'])
-        # self.client = MongoClient(settings.MONGO_IP, settings.MONGO_PORT)
+        # self.client = MongoClient(['172.31.16.177:27017', '172.31.30.19:27017'])
+        self.client = MongoClient(settings.MONGO_IP, settings.MONGO_PORT)
         self.memcache = memcacheService.MemcacheService(settings.MEMCACHE_DB_IP,settings.MEMCACHE_DB_PORT)
         self.db = self.client.tweet
         self.userDB = self.db.user

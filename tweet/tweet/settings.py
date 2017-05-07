@@ -17,7 +17,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PRODUCTION = True
 
 # memcached sessions
-SESSION_CACHE = '172.31.22.172:11211'
+SESSION_CACHE = '192.168.1.82:11211'
 if not PRODUCTION:
     SESSION_CACHE = '127.0.0.1:11211'
 

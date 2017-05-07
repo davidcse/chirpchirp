@@ -50,6 +50,20 @@ mongos - {2}
 
 memcached server - {on appserver8}
 
+-f (file size): unlimited
+-t (cpu time): unlimited
+-v (virtual memory): unlimited [1]
+-n (open files): 64000
+-m (memory size): unlimited [1] [2]
+-u (processes/threads): 64000
+
+ulimit -f unlimited
+ulimit -t unlimited
+ulimit -v unlimited
+ulimit -n 64000
+ulimit -m unlimited
+ulimit -u unlimited
+
 
 
 set up load balancer
@@ -60,10 +74,12 @@ set up config
 set up mongos1
 set up mongos2
 
+sysctl -p
+
 Safety Checks:
 ulimit -u;
 sysctl fs.file-max;
 
-mongos: {'172.31.16.177:27017', '172.31.30.19:27017'}
-memcache for app: {shard8: 172.31.20.129}
-memcache for sessions: {lb: 172.31.22.172}
+mongos: {lb:}
+memcache for app: {config}
+memcache for sessions: {lb: }

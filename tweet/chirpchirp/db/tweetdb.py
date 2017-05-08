@@ -154,7 +154,6 @@ class TweetDB:
         # remove all media associated with tweet
         if media_array != None:
             for media in media_array:
-                print 'deleting...', media
                 fs = GridFS(self.db, collection='media')
                 fs.delete(ObjectId(media))
                 # remove media from memcache as well

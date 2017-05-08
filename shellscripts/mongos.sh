@@ -27,7 +27,7 @@ shard4_ip=${7}
 #shard6_ip=${9}
 #shard7_ip=${10}
 #shard8_ip=${11}
-sleep_limit=5
+sleep_limit=0
 mongos_js="https://raw.githubusercontent.com/elvis-alexander/chirpchirp/master/shellscripts/js/mongos.js"
 
 # installing mongodb
@@ -49,7 +49,7 @@ chmod -R 777 mongo/mongo_logs
 # configuring mongos
 echo $seperator "Running Mongos" $seperator
 sleep $sleep_limit
-sudo mongos --configdb conf/$config_ip:$config_port --bind_ip $host_ip --port 27017 --logpath /home/ubuntu/mongo/mongo_logs/mongos.log --logappend --fork
+sudo mongos --configdb conf/$config_ip:$config_port --bind_ip $host_ip --port 27017 --logpath /root/mongo/mongo_logs/mongos.log --logappend --fork
 # old=> mongos --configdb conf/192.168.1.49:27030 --bind_ip 192.168.1.54 --port 27017 --logpath /home/ubuntu/mongo/mongo_logs/mongos.log --logappend --fork
 # mongos --configdb conf/172.31.31.208:27030 --bind_ip 172.31.16.177 --port 27017 --logpath /home/ubuntu/mongo/mongo_logs/mongos.log --logappend --fork
 

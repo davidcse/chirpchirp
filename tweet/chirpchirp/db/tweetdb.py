@@ -9,6 +9,9 @@ from .. config import settings
 
 # main file for database transactions
 # Serves as a mongoDB client
+
+client = MongoClient(settings.MONGO_IP, settings.MONGO_PORT, maxPoolSize=200)
+
 class TweetDB:
     def __init__(self, user=None, tweet=None, search=None, follow=None, like=None):
         # set models
@@ -18,8 +21,8 @@ class TweetDB:
         self.follow = follow
         self.like = like
         # connect to mongo
-        # self.client = MongoClient(['172.31.16.177:27017', '172.31.30.19:27017'])
-        self.client = MongoClient(settings.MONGO_IP, settings.MONGO_PORT)
+        # self.client = MongoClient(settings.MONGO_IP, settings.MONGO_PORT, maxPoolSize=200)
+        self.client = client
         # self.memcache = memcacheService.MemcacheService(settings.MEMCACHE_DB_IP,settings.MEMCACHE_DB_PORT)
         self.db = self.client.tweet
         self.userDB = self.db.user
@@ -269,4 +272,5 @@ class TweetDB:
 
     # close mongo connection
     def close(self):
-        self.client.close()
+        return
+        # self.client.close()

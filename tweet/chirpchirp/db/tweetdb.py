@@ -6,12 +6,10 @@ from .. utils import searchDelegator
 from pymongo.errors import DuplicateKeyError
 from .. utils import memcacheService
 from .. config import settings
+from gridfs import GridFS
 
 # main file for database transactions
 # Serves as a mongoDB client
-
-client = MongoClient(settings.MONGO_IP, settings.MONGO_PORT, maxPoolSize=200)
-
 class TweetDB:
     def __init__(self, user=None, tweet=None, search=None, follow=None, like=None):
         # set models
@@ -21,14 +19,12 @@ class TweetDB:
         self.follow = follow
         self.like = like
         # connect to mongo
-        # self.client = MongoClient(settings.MONGO_IP, settings.MONGO_PORT, maxPoolSize=200)
-        self.client = client
+        self.client = MongoClient(settings.MONGO_IP, settings.MONGO_PORT)
         # self.memcache = memcacheService.MemcacheService(settings.MEMCACHE_DB_IP,settings.MEMCACHE_DB_PORT)
         self.db = self.client.tweet
         self.userDB = self.db.user
         self.tweetsDB = self.db.tweets
         self.followsDB = self.db.follows
-        self.mediaDB = self.db.media
         self.likesDB = self.db.likes
 
     # insert disabled user
@@ -159,8 +155,8 @@ class TweetDB:
         if media_array != None:
             for media in media_array:
                 print 'deleting...', media
-                mediaSearchConfig = {"_id": ObjectId(media)}
-                self.mediaDB.delete_one(mediaSearchConfig)
+                fs = GridFS(self.db, collection='media')
+                fs.delete(ObjectId(media))
                 # remove media from memcache as well
                 # if(self.memcache.get({"mediaDB": mediaSearchConfig})):
                 #     self.memcache.delete({"mediaDB": mediaSearchConfig})
@@ -250,27 +246,26 @@ class TweetDB:
 
     # save media file
     def save_media(self, f):
-        content = f.read()
-        return str(self.mediaDB.insert({
-            "content": Binary(content)
-        }))
+        fs = GridFS(self.db, collection='media')
+        return str(fs.put(f))
 
     # retrieves media
     def get_media(self, mid):
-        searchConfig = {"_id": ObjectId(mid)}
+        # searchConfig = ObjectId(mid)
         #check if query for this db is already in memcache
         # if(self.memcache.get({"mediaDB" : searchConfig})):
         #     return self.memcache.get({"mediaDB" : searchConfig})
-        #check actual db for this query
-        media = self.mediaDB.find_one(searchConfig)
-        if media == None:
-            return None
-        response = media["content"]
+        #check actual db for this query`
+        fs = GridFS(self.db, collection='media')
+        return fs.get(ObjectId(mid)).read()
+        # media = self.mediaDB.find_one(searchConfig)
+        # if media == None:
+        #     return None
+        # response = media["content"]
         # store the query,result specific to this db, into memcache.
         # self.memcache.set({"mediaDB" : searchConfig}, response)
-        return response
+        # return response
 
     # close mongo connection
     def close(self):
-        return
-        # self.client.close()
+        self.client.close()

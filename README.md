@@ -83,3 +83,8 @@ sysctl fs.file-max;
 mongos: {lb:}
 memcache for app: {config}
 memcache for sessions: {lb: }
+
+shard1/192.168.1.70:27040
+shard2/192.168.1.73:27040
+shard3/192.168.1.76:27040
+shard4/192.168.1.79:27040

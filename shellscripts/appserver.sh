@@ -67,7 +67,7 @@ sudo apt-get install nginx
 
 # confingure nginx
 echo $seperator "Launching uwsgi" $seperator
-sed -ie 's/host_ip/'$host_ip'/g' /root/chirpchirp/nginxconfig/chirp_nginx.conf
+sed -ie 's/host_ip/'$host_ip'/g' /home/ubuntu/chirpchirp/nginxconfig/chirp_nginx.conf
 
 
 echo $seperator "Launching uwsgi" $seperator
@@ -75,10 +75,11 @@ echo $seperator "Launching uwsgi" $seperator
 #sudo uwsgi --socket /home/ubuntu/chirp.sock --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 10 --threads 4 --chmod-socket=666 --logto /home/ubuntu/uwsgi.log --daemonize /home/ubuntu/daemonize.log
 #uwsgi --socket /home/ubuntu/chirp.sock --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 4 --threads 1 --chmod-socket=666
 #uwsgi --socket /home/ubuntu/chirp.sock --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 4 --threads 2 --chmod-socket=666 --buffer-size=65535 --logto /home/ubuntu/uwsgi.log --daemonize /home/ubuntu/daemonize.log
-uwsgi --socket /root/chirp.sock --wsgi-file /root/chirpchirp/tweet/tweet/wsgi.py --master --processes 4 --threads 1 --chmod-socket=666 --buffer-size=262140 --logto /root/uwsgi.log --daemonize /root/daemonize.log
+uwsgi --socket /home/ubuntu/chirp.sock --wsgi-file /home/ubuntu/chirpchirp/tweet/tweet/wsgi.py --master --processes 12 --threads 4 --chmod-socket=666 --buffer-size=262140 --logto /home/ubuntu/uwsgi.log --daemonize /home/ubuntu/daemonize.log
+# --listen 4096 --max-fd 64000
 
 echo $seperator "Connecting nginx to uwsgi" $seperator
-sudo ln -s /root/chirpchirp/nginxconfig/chirp_nginx.conf /etc/nginx/sites-enabled/
+sudo ln -s /home/ubuntu/chirpchirp/nginxconfig/chirp_nginx.conf /etc/nginx/sites-enabled/
 
 # run nginx
 echo $seperator "Restarting nginx" $seperator

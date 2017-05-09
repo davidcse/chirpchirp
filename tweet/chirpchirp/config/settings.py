@@ -4,7 +4,7 @@
 PRODUCTION = True
 
 # mongodb
-MONGO_IP = '192.168.1.82'
+MONGO_IP = '192.168.1.88'
 MONGO_PORT = 27017
 
 # memcached for mongodb

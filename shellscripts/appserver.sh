@@ -3,10 +3,18 @@
 # please add this in order to grant execution privlidges
 # chmod +x appserver.sh
 # USAGE {host_ip}
-# USAGE ./appserver.sh 192.168.1.70
-# USAGE ./appserver.sh 192.168.1.73
-# USAGE ./appserver.sh 192.168.1.76
-# USAGE ./appserver.sh 192.168.1.79
+# USAGE ./app.sh 192.168.1.70
+# USAGE ./app.sh 192.168.1.73
+# USAGE ./app.sh 192.168.1.76
+# USAGE ./app.sh 192.168.1.79
+
+#./app.sh 192.168.1.103
+
+#./app.sh 192.168.1.105
+
+#./app.sh 192.168.1.102
+
+#./app.sh 192.168.1.100
 
 
 # script to set up an app server, will be responsible for downloading project, running uwsgi and nginx

@@ -7,7 +7,7 @@
 # ./mongoconf.sh 172.31.31.208 27030
 
 
-# ./mongoconf.sh 192.168.1.85 27030
+# ./conf.sh 192.168.1.88 27030
 
 # script variables
 seperator="---------------------"
@@ -36,7 +36,7 @@ mkdir mongo/config/conf
 # running mongo config server
 echo $seperator "Running config server" $seperator
 sleep $sleep_limit
-mongod --configsvr --replSet conf --dbpath /root/mongo/config/conf --bind_ip $host_ip --port $host_port --logpath /root/mongo/mongo_logs/conf.log --fork
+mongod --configsvr --replSet conf --dbpath /home/ubuntu/mongo/config/conf --bind_ip $host_ip --port $host_port --logpath /home/ubuntu/mongo/mongo_logs/conf.log --fork
 #mongod --configsvr --replSet conf --dbpath /home/ubuntu/mongo/config/conf --bind_ip 172.31.31.208 --port 27030 --logpath /home/ubuntu/mongo/mongo_logs/conf.log --fork
 #mongod --configsvr --replSet conf --dbpath /home/ubuntu/mongo/config/conf --bind_ip 192.168.1.49 --port 27030 --logpath /home/ubuntu/mongo/mongo_logs/conf.log --fork
 

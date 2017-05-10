@@ -1,5 +1,4 @@
 //verifying this is committed
-use tweet;
 sh.addShard("shard1/shard1_ip:27040");
 sh.addShard("shard2/shard2_ip:27040");
 sh.addShard("shard3/shard3_ip:27040");

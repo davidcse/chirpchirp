@@ -9,6 +9,9 @@
 
 # ./conf.sh 192.168.1.88 27030
 
+# ./conf.sh 192.168.1.88 27030
+
+
 # script variables
 seperator="---------------------"
 host_ip=$1

@@ -13,6 +13,8 @@
 
 # USAGE: ./mongos.sh 192.168.1.82 192.168.1.85 27030 192.168.1.70 192.168.1.73 192.168.1.76 192.168.1.79
 
+# USAGE: ./mongos.sh 192.168.1.88 192.168.1.88 27030 192.168.1.103 192.168.1.105 192.168.1.102 192.168.1.100
+
 
 # script variables
 seperator="---------------------"
@@ -49,7 +51,7 @@ chmod -R 777 mongo/mongo_logs
 # configuring mongos
 echo $seperator "Running Mongos" $seperator
 sleep $sleep_limit
-sudo mongos --configdb conf/$config_ip:$config_port --bind_ip $host_ip --port 27017 --logpath /root/mongo/mongo_logs/mongos.log --logappend --fork
+sudo mongos --configdb conf/$config_ip:$config_port --bind_ip $host_ip --port 27017 --logpath /home/ubuntu/mongo/mongo_logs/mongos.log --logappend --fork
 #mongos --configdb conf/192.168.1.85:27030 --bind_ip 192.168.1.82 --port 27017 --dbpath /root/m --logpath /root/mongos.log --logappend --fork
 # old=> mongos --configdb conf/192.168.1.49:27030 --bind_ip 192.168.1.54 --port 27017 --logpath /home/ubuntu/mongo/mongo_logs/mongos.log --logappend --fork
 # mongos --configdb conf/172.31.31.208:27030 --bind_ip 172.31.16.177 --port 27017 --logpath /home/ubuntu/mongo/mongo_logs/mongos.log --logappend --fork
